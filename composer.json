@@ -1,0 +1,24 @@
+{
+    "name": "exsyst/io-component",
+    "type": "library",
+    "description": "Object-oriented I/O facility",
+    "license": "Apache-2.0",
+    "authors": [
+        {
+            "name": "EXSyst"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=5.4"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~4"
+    },
+    "autoload": {
+        "psr-0": {
+            "EXSyst\\Component\\IO": ""
+        }
+    },
+    "target-dir": "EXSyst/Component/IO"
+}
