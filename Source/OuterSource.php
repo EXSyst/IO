@@ -2,8 +2,6 @@
 
 namespace EXSyst\Component\IO\Source;
 
-use EXSyst\Component\IO\SourceInterface;
-
 /**
  * Helper class for decorating a source.
  *

@@ -2,8 +2,6 @@
 
 namespace EXSyst\Component\IO\Sink;
 
-use EXSyst\Component\IO\SinkInterface;
-
 final class SystemSink implements SinkInterface
 {
     const BLOCK_BYTE_COUNT = 1024;

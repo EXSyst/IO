@@ -2,8 +2,6 @@
 
 namespace EXSyst\Component\IO\Sink;
 
-use EXSyst\Component\IO\SinkInterface;
-
 class RecordFunctionSink implements SinkInterface
 {
     /**
@@ -38,7 +36,7 @@ class RecordFunctionSink implements SinkInterface
 
     public function __destruct()
     {
-        if (!emppty($this->buffer)) {
+        if (!empty($this->buffer)) {
             call_user_func($this->recordFunction, $this->buffer);
             $this->buffer = '';
         }

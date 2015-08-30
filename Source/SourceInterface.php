@@ -1,6 +1,8 @@
 <?php
 
-namespace EXSyst\Component\IO;
+namespace EXSyst\Component\IO\Source;
+
+use EXSyst\Component\IO\Exception;
 
 /**
  * Represents a source from which raw bytes can be read.

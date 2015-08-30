@@ -3,9 +3,8 @@
 namespace EXSyst\Component\IO\Source;
 
 use EXSyst\Component\IO\Exception;
-use EXSyst\Component\IO\SinkInterface;
+use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Source;
-use EXSyst\Component\IO\SourceInterface;
 use EXSyst\Component\IO\Source\Internal\StreamSourceState;
 
 class StreamSource implements SinkInterface, SourceInterface

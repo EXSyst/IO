@@ -4,7 +4,7 @@ namespace EXSyst\Component\IO\Reader;
 
 use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\Source;
-use EXSyst\Component\IO\SourceInterface;
+use EXSyst\Component\IO\Source\SourceInterface;
 use EXSyst\Component\IO\Sink\StringSink;
 use EXSyst\Component\IO\Source\OuterSource;
 use EXSyst\Component\IO\Source\StringSource;

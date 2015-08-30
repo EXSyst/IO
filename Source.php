@@ -3,6 +3,8 @@
 namespace EXSyst\Component\IO;
 
 use EXSyst\Component\IO\Reader\CDataReader;
+use EXSyst\Component\IO\Sink\SinkInterface;
+use EXSyst\Component\IO\Source\SourceInterface;
 use EXSyst\Component\IO\Source\BufferedSource;
 use EXSyst\Component\IO\Source\StreamSource;
 use EXSyst\Component\IO\Source\StringSource;

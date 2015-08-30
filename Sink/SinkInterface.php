@@ -1,6 +1,8 @@
 <?php
 
-namespace EXSyst\Component\IO;
+namespace EXSyst\Component\IO\Sink;
+
+use EXSyst\Component\IO\Exception;
 
 /**
  * Represents a sink into which raw bytes can be written.

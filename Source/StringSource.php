@@ -3,7 +3,6 @@
 namespace EXSyst\Component\IO\Source;
 
 use EXSyst\Component\IO\Exception;
-use EXSyst\Component\IO\SourceInterface;
 use EXSyst\Component\IO\Source\Internal\StringSourceState;
 
 class StringSource implements SourceInterface

@@ -2,8 +2,6 @@
 
 namespace EXSyst\Component\IO\Sink;
 
-use EXSyst\Component\IO\SinkInterface;
-
 class StringSink implements SinkInterface
 {
     const MAX_CONCAT_LENGTH = 4096;
