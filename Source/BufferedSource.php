@@ -2,6 +2,8 @@
 
 namespace EXSyst\Component\IO\Source;
 
+use EXSyst\Component\IO\Exception;
+
 use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\SourceInterface;
 
@@ -158,21 +160,21 @@ class BufferedSource extends OuterSource
     private function checkByteCount(&$byteCount, $allowIncomplete, $skipping)
     {
         if ($byteCount < 0) {
-            throw new LengthException('The byte count must not be negative');
+            throw new Exception\LengthException('The byte count must not be negative');
         }
         if ($this->getRemainingBufferByteCount() >= $byteCount)
             return;
         $maxByteCount = $this->getRemainingByteCount();
         if ($maxByteCount !== null) {
             if (($maxByteCount < 0 && $byteCount > 0 || $maxByteCount < $byteCount) && !$allowIncomplete) {
-                throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
             }
             $byteCount = min($byteCount, $maxByteCount);
             if (!$skipping)
                 $this->ensureRemainingBufferByteCount($byteCount, $allowIncomplete);
         } elseif (!$skipping) {
             if (!$this->ensureRemainingBufferByteCount($byteCount, $allowIncomplete) && !$allowIncomplete)
-                throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
             $byteCount = min($byteCount, $this->getRemainingBufferByteCount());
         }
     }
@@ -217,7 +219,7 @@ class BufferedSource extends OuterSource
                 $this->lastBuffer = $this->firstBuffer;
                 $this->cursor = 0;
                 if ($skippedByteCount < $byteCount && !$allowIncomplete)
-                    throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                    throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
                 return $effectiveByteCount + $skippedByteCount - $byteCount;
             } else
                 return $effectiveByteCount;

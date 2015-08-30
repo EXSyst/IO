@@ -2,7 +2,7 @@
 
 namespace EXSyst\Component\IO\Reader;
 
-use RuntimeException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\Source\OuterSource;
 
 class JsonReader extends OuterSource
@@ -20,7 +20,7 @@ class JsonReader extends OuterSource
         }
         $value = json_decode($json);
         if ($value === null) {
-            throw new RuntimeException('Invalid JSON data');
+            throw new Exception\RuntimeException('Invalid JSON data');
         }
 
         return $value;
@@ -46,7 +46,7 @@ class JsonReader extends OuterSource
                         $parts[] = '\\'.$this->source->read(1);
                     } else {
                         if ($this->source->read(1) != '"') {
-                            throw new RuntimeException('Invalid JSON data');
+                            throw new Exception\RuntimeException('Invalid JSON data');
                         }
                         $parts[] = '"';
                     }
@@ -56,7 +56,7 @@ class JsonReader extends OuterSource
             }
             if ($this->source->eat('[')) {
                 if ($depth < 2) {
-                    throw new RuntimeException('Too deeply nested JSON data');
+                    throw new Exception\RuntimeException('Too deeply nested JSON data');
                 }
                 $this->source->eatWhiteSpace();
                 if ($this->source->eat(']')) {
@@ -67,14 +67,14 @@ class JsonReader extends OuterSource
                     $subs[] = $this->readJsonValue($depth - 1);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != ']') {
-                    throw new RuntimeException('Invalid JSON data');
+                    throw new Exception\RuntimeException('Invalid JSON data');
                 }
 
                 return '['.implode(',', $subs).']';
             }
             if ($this->source->eat('{')) {
                 if ($depth < 2) {
-                    throw new RuntimeException('Too deeply nested JSON data');
+                    throw new Exception\RuntimeException('Too deeply nested JSON data');
                 }
                 $this->source->eatWhiteSpace();
                 if ($this->source->eat('}')) {
@@ -84,17 +84,17 @@ class JsonReader extends OuterSource
                 do {
                     $key = $this->readJsonValue($depth - 1);
                     if ($this->source->read(1) != ':') {
-                        throw new RuntimeException('Invalid JSON data');
+                        throw new Exception\RuntimeException('Invalid JSON data');
                     }
                     $subs[] = $key.':'.$this->readJsonValue($depth - 1);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != '}') {
-                    throw new RuntimeException('Invalid JSON data');
+                    throw new Exception\RuntimeException('Invalid JSON data');
                 }
 
                 return '{'.implode(',', $subs).'}';
             }
-            throw new RuntimeException('Invalid JSON data');
+            throw new Exception\RuntimeException('Invalid JSON data');
         } finally {
             $this->source->eatWhiteSpace();
         }

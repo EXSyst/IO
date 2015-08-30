@@ -16,8 +16,8 @@ interface StateInterface
      *
      * @return self This state, for method chaining
      *
-     * @throws \RuntimeException If an I/O operation fails
-     * @throws \LogicException   If an earlier state has already been restored
+     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\LogicException   If an earlier state has already been restored
      *
      * @api
      */

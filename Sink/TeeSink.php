@@ -20,7 +20,7 @@ class TeeSink implements SinkInterface
     {
         foreach ($sinks as $sink) {
             if (!($sink instanceof SinkInterface)) {
-                throw new InvalidArgumentException('The sub-sinks must be sinks');
+                throw new Exception\InvalidArgumentException('The sub-sinks must be sinks');
             }
         }
         $this->sinks = array_values($sinks);

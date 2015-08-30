@@ -16,7 +16,7 @@ interface SourceInterface
      *
      * @return int Number of bytes consumed from the source
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -30,7 +30,7 @@ interface SourceInterface
      *
      * @return int|null Number of bytes remaining in the source, or null if it can't be determined
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -44,7 +44,7 @@ interface SourceInterface
      *
      * @return bool true if the source is definitely fully consumed, false if it may contain more data
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -58,7 +58,7 @@ interface SourceInterface
      *
      * @return bool true if the source would block, false if it would return (or throw) immediately
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -71,7 +71,7 @@ interface SourceInterface
      *
      * @return int The source's block size, in bytes
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -84,7 +84,7 @@ interface SourceInterface
      *
      * @return int Number of bytes before the source's next block boundary
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -95,8 +95,8 @@ interface SourceInterface
      *
      * @return StateInterface The source's current state
      *
-     * @throws \RuntimeException If an I/O operation fails
-     * @throws \LogicException   If the source doesn't support restoring a previous state
+     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\LogicException   If the source doesn't support restoring a previous state
      *
      * @api
      */
@@ -110,9 +110,9 @@ interface SourceInterface
      *
      * @return string The data that was just read
      *
-     * @throws \LengthException    If a negative amount is requested
-     * @throws \UnderflowException If the exact requested amount cannot be read and the caller doesn't allow an incomplete read
-     * @throws \RuntimeException   If an I/O operation fails
+     * @throws Exception\LengthException    If a negative amount is requested
+     * @throws Exception\UnderflowException If the exact requested amount cannot be read and the caller doesn't allow an incomplete read
+     * @throws Exception\RuntimeException   If an I/O operation fails
      *
      * @api
      */
@@ -126,10 +126,10 @@ interface SourceInterface
      *
      * @return string The data that was just read
      *
-     * @throws \LengthException    If a negative amount is requested
-     * @throws \UnderflowException If the exact requested amount cannot be read and the caller doesn't allow an incomplete read
-     * @throws \RuntimeException   If an I/O operation fails
-     * @throws \LogicException     If the current source doesn't support reading data without consuming it
+     * @throws Exception\LengthException    If a negative amount is requested
+     * @throws Exception\UnderflowException If the exact requested amount cannot be read and the caller doesn't allow an incomplete read
+     * @throws Exception\RuntimeException   If an I/O operation fails
+     * @throws Exception\LogicException     If the current source doesn't support reading data without consuming it
      *
      * @api
      */
@@ -145,9 +145,9 @@ interface SourceInterface
      *
      * @return int Number of bytes that were just skipped
      *
-     * @throws \LengthException    If a negative amount is requested
-     * @throws \UnderflowException If the exact requested amount cannot be skipped and the caller doesn't allow an incomplete skip
-     * @throws \RuntimeException   If an I/O operation fails
+     * @throws Exception\LengthException    If a negative amount is requested
+     * @throws Exception\UnderflowException If the exact requested amount cannot be skipped and the caller doesn't allow an incomplete skip
+     * @throws Exception\RuntimeException   If an I/O operation fails
      *
      * @api
      */

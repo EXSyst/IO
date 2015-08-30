@@ -16,7 +16,7 @@ interface SinkInterface
      *
      * @return int Number of bytes written into the sink
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -29,7 +29,7 @@ interface SinkInterface
      *
      * @return int The sink's block size, in bytes
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -42,7 +42,7 @@ interface SinkInterface
      *
      * @return int Number of bytes before the sink's next block boundary
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */
@@ -55,9 +55,9 @@ interface SinkInterface
      *
      * @return self
      *
-     * @throws \LengthException   If a negative amount is requested
-     * @throws \OverflowException If the data cannot be written because the sink is full
-     * @throws \RuntimeException  If an I/O operation fails
+     * @throws Exception\LengthException   If a negative amount is requested
+     * @throws Exception\OverflowException If the data cannot be written because the sink is full
+     * @throws Exception\RuntimeException  If an I/O operation fails
      *
      * @api
      */
@@ -68,7 +68,7 @@ interface SinkInterface
      *
      * @return self
      *
-     * @throws \RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException If an I/O operation fails
      *
      * @api
      */

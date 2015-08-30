@@ -2,7 +2,7 @@
 
 namespace EXSyst\Component\IO\Reader;
 
-use UnderflowException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\SourceInterface;
 use EXSyst\Component\IO\Sink\StringSink;
@@ -36,7 +36,7 @@ class CDataReader extends OuterSource
         $src = $this->source;
         try {
             $data = $src->peek($len);
-        } catch (UnderflowException $e) {
+        } catch (Exception\UnderflowException $e) {
             return false;
         }
         if ($data != $src) {
@@ -54,7 +54,7 @@ class CDataReader extends OuterSource
         $src = $this->source;
         try {
             $data = $src->peek($len);
-        } catch (UnderflowException $e) {
+        } catch (Exception\UnderflowException $e) {
             return;
         }
         if (strcasecmp($data, $src)) {

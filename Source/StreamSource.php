@@ -2,11 +2,7 @@
 
 namespace EXSyst\Component\IO\Source;
 
-use InvalidArgumentException;
-use LengthException;
-use LogicException;
-use RuntimeException;
-use UnderflowException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\SinkInterface;
 use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\SourceInterface;
@@ -38,14 +34,14 @@ class StreamSource implements SinkInterface, SourceInterface
     public function __construct($stream, $streamOwner = false, $onClose = null)
     {
         if (!is_resource($stream)) {
-            throw new InvalidArgumentException('The stream must be a resource');
+            throw new Exception\InvalidArgumentException('The stream must be a resource');
         }
         if ($onClose !== null && !is_callable($onClose)) {
-            throw new InvalidArgumentException('The on-close function must be callable');
+            throw new Exception\InvalidArgumentException('The on-close function must be callable');
         }
         $resType = get_resource_type($stream);
         if ($resType != 'stream' && $resType != 'file') {
-            throw new InvalidArgumentException('The stream must be a suitable resource');
+            throw new Exception\InvalidArgumentException('The stream must be a suitable resource');
         }
         $this->stream = $stream;
         $this->streamOwner = $streamOwner;
@@ -174,7 +170,7 @@ class StreamSource implements SinkInterface, SourceInterface
     public function captureState()
     {
         if (!$this->seekable) {
-            throw new LogicException('The stream is not seekable');
+            throw new Exception\LogicException('The stream is not seekable');
         }
 
         return new StreamSourceState($this->stream);
@@ -183,12 +179,12 @@ class StreamSource implements SinkInterface, SourceInterface
     private function checkByteCount(&$byteCount, $allowIncomplete)
     {
         if ($byteCount < 0) {
-            throw new LengthException('The byte count must not be negative');
+            throw new Exception\LengthException('The byte count must not be negative');
         }
         $maxByteCount = $this->getRemainingByteCount();
         if ($maxByteCount !== null) {
             if (($maxByteCount < 0 && $byteCount > 0 || $maxByteCount < $byteCount) && !$allowIncomplete) {
-                throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
             }
             $byteCount = min($byteCount, $maxByteCount);
 
@@ -212,7 +208,7 @@ class StreamSource implements SinkInterface, SourceInterface
                 }
                 $block = fread($this->stream, min($blksize, $byteCount));
                 if ($block === false) {
-                    throw new RuntimeException('An I/O error occurred');
+                    throw new Exception\RuntimeException('An I/O error occurred');
                 }
                 if (empty($block)) {
                     break;
@@ -221,7 +217,7 @@ class StreamSource implements SinkInterface, SourceInterface
                 $blocks[] = $block;
             }
             if ($byteCount > 0 && !$allowIncomplete) {
-                throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
             }
 
             return implode($blocks);
@@ -255,7 +251,7 @@ class StreamSource implements SinkInterface, SourceInterface
                 }
                 $block = fread($this->stream, min($blksize, $byteCount));
                 if ($block === false) {
-                    throw new RuntimeException('An I/O error occurred');
+                    throw new Exception\RuntimeException('An I/O error occurred');
                 }
                 if (empty($block)) {
                     break;
@@ -263,7 +259,7 @@ class StreamSource implements SinkInterface, SourceInterface
                 $byteCount -= strlen($block);
             }
             if ($byteCount > 0 && !$allowIncomplete) {
-                throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
             }
 
             return $baseByteCount - $byteCount;
@@ -278,10 +274,10 @@ class StreamSource implements SinkInterface, SourceInterface
             for (;;) {
                 $n = fwrite($this->stream, $data);
                 if ($n === false) {
-                    throw new RuntimeException('An I/O error occurred');
+                    throw new Exception\RuntimeException('An I/O error occurred');
                 }
                 if (!$n) {
-                    throw new OverflowException('The sink is full');
+                    throw new Exception\OverflowException('The sink is full');
                 }
                 if ($n == $len) {
                     break;
@@ -298,7 +294,7 @@ class StreamSource implements SinkInterface, SourceInterface
     public function flush($data)
     {
         if (!fflush($this->stream)) {
-            throw new RuntimeException('An I/O error occurred');
+            throw new Exception\RuntimeException('An I/O error occurred');
         }
 
         return $this;

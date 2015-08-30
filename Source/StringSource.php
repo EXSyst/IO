@@ -2,8 +2,7 @@
 
 namespace EXSyst\Component\IO\Source;
 
-use LengthException;
-use UnderflowException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\SourceInterface;
 use EXSyst\Component\IO\Source\Internal\StringSourceState;
 
@@ -80,11 +79,11 @@ class StringSource implements SourceInterface
     private function checkByteCount(&$byteCount, $allowIncomplete)
     {
         if ($byteCount < 0) {
-            throw new LengthException('The byte count must not be negative');
+            throw new Exception\LengthException('The byte count must not be negative');
         }
         $maxByteCount = $this->getRemainingByteCount();
         if (($maxByteCount < 0 && $byteCount > 0 || $maxByteCount < $byteCount) && !$allowIncomplete) {
-            throw new UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+            throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
         }
         $byteCount = min($byteCount, $maxByteCount);
     }

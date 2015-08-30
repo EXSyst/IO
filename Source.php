@@ -2,9 +2,6 @@
 
 namespace EXSyst\Component\IO;
 
-use Exception;
-use ErrorException;
-use InvalidArgumentException;
 use EXSyst\Component\IO\Reader\CDataReader;
 use EXSyst\Component\IO\Source\BufferedSource;
 use EXSyst\Component\IO\Source\StreamSource;
@@ -28,7 +25,7 @@ final class Source
     {
         try {
             $src = new StreamSource($stream, $streamOwner, $onClose);
-        } catch (Exception $e) {
+        } catch (Exception\ExceptionInterface $e) {
             if ($streamOwner) {
                 fclose($stream);
                 if ($onClose !== null) {
@@ -47,7 +44,7 @@ final class Source
     public static function fromFile($file, $mode = 'rb', $onClose = null, $buffered = true)
     {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
-            throw new ErrorException($errstr, 0, $errno, $errfile, $errline);
+            throw new Exception\ErrorException($errstr, 0, $errno, $errfile, $errline);
         });
         try {
             $fd = fopen($file, $mode);
@@ -66,12 +63,12 @@ final class Source
     public static function transact(SourceInterface $source, $transactionFn, $restoreOnFalsyReturn = false)
     {
         if (!is_callable($transactionFn)) {
-            throw new InvalidArgumentException('The transaction function must be callable');
+            throw new Exception\InvalidArgumentException('The transaction function must be callable');
         }
         $state = $source->captureState();
         try {
             $retval = call_user_func($transactionFn);
-        } catch (Exception $ex) {
+        } catch (\Exception $ex) {
             $state->restore();
             throw $ex;
         }

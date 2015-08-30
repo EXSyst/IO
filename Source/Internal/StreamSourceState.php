@@ -2,7 +2,7 @@
 
 namespace EXSyst\Component\IO\Source\Internal;
 
-use LogicException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\StateInterface;
 
 /**
@@ -32,7 +32,7 @@ class StreamSourceState extends StateInterface
     public function restore()
     {
         if (ftell($this->stream) < $this->cursor) {
-            throw new LogicException('The source has already been restored to an earlier state');
+            throw new Exception\LogicException('The source has already been restored to an earlier state');
         }
         fseek($this->stream, $this->cursor, SEEK_SET);
 

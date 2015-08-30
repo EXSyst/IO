@@ -2,7 +2,7 @@
 
 namespace EXSyst\Component\IO\Reader;
 
-use RuntimeException;
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\Source\OuterSource;
 
 class SerializedReader extends OuterSource
@@ -20,7 +20,7 @@ class SerializedReader extends OuterSource
         }
         $value = unserialize($serialized);
         if ($value === false) {
-            throw new RuntimeException('Invalid serialized data');
+            throw new Exception\RuntimeException('Invalid serialized data');
         }
 
         return $value;
