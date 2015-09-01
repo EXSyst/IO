@@ -26,6 +26,9 @@ class JsonReader extends OuterSource
         return $value;
     }
 
+    /**
+     * @return string
+     */
     public function readJsonValue($depth = 512)
     {
         $this->source->eatWhiteSpace();
