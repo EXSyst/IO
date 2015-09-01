@@ -12,7 +12,7 @@ use EXSyst\Component\IO\StateInterface;
  *
  * @author Nicolas "Exter-N" L. <exter-n@exter-n.fr>
  */
-class StringSourceState extends StateInterface
+class StringSourceState implements StateInterface
 {
     private $offsetRef;
     private $offset;

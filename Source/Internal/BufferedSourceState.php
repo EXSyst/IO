@@ -12,7 +12,7 @@ use EXSyst\Component\IO\StateInterface;
  *
  * @author Nicolas "Exter-N" L. <exter-n@exter-n.fr>
  */
-class BufferedSourceState extends StateInterface
+class BufferedSourceState implements StateInterface
 {
     private $firstBufferRef;
     private $firstBuffer;

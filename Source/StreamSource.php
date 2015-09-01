@@ -45,7 +45,7 @@ class StreamSource implements SinkInterface, SourceInterface
         $this->stream = $stream;
         $this->streamOwner = $streamOwner;
         $this->onClose = $onClose;
-        $this->seekable = fstat($stream) !== false && fseek($stream, 0, SEEK_CUR) === 0;
+        $this->seekable = ($stat = fstat($stream)) !== false && isset($stat['mode']) && ($stat['mode'] & 0170000) == 0 && fseek($stream, 0, SEEK_CUR) === 0;
         $this->baseCursor = ftell($stream);
     }
 
@@ -113,8 +113,10 @@ class StreamSource implements SinkInterface, SourceInterface
     private function selectRead()
     {
         $read = [$this->stream];
+        $write = [];
+        $except = [];
 
-        return !!stream_select($read, null, null, 0);
+        return !!stream_select($read, $write, $except, 0);
     }
 
     /** {@inheritdoc} */
@@ -142,7 +144,7 @@ class StreamSource implements SinkInterface, SourceInterface
         if ($byteCount > 1 && !$allowIncomplete) {
             return true;
         } // Does PHP give any way to query how many bytes can be read without blocking ?
-        return $this->selectRead();
+        return !$this->selectRead();
     }
 
     /** {@inheritdoc} */
@@ -202,7 +204,7 @@ class StreamSource implements SinkInterface, SourceInterface
             $blocks = [];
             $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
             while ($byteCount > 0) {
-                if ($allowIncomplete && !$this->selectRead()) {
+                if ($allowIncomplete && !empty($blocks) && !$this->selectRead()) {
                     break;
                 }
                 $block = fread($this->stream, min($blksize, $byteCount));
@@ -245,7 +247,7 @@ class StreamSource implements SinkInterface, SourceInterface
             $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
             $baseByteCount = $byteCount;
             while ($byteCount > 0) {
-                if ($allowIncomplete && !$this->selectRead()) {
+                if ($allowIncomplete && $byteCount < $baseByteCount && !$this->selectRead()) {
                     break;
                 }
                 $block = fread($this->stream, min($blksize, $byteCount));
@@ -290,7 +292,7 @@ class StreamSource implements SinkInterface, SourceInterface
     }
 
     /** {@inheritdoc} */
-    public function flush($data)
+    public function flush()
     {
         if (!fflush($this->stream)) {
             throw new Exception\RuntimeException('An I/O error occurred');

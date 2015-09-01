@@ -66,6 +66,7 @@ class BufferedSource extends OuterSource
         $len = min($byteCount, $firstBuffer->length - $cursor);
         $data = ($cursor == 0 && $len == $firstBuffer->length) ? $firstBuffer->data : substr($firstBuffer->data, $cursor, $len);
         $cursor += $len;
+        $byteCount -= $len;
         if ($cursor == $firstBuffer->length && $firstBuffer->next) {
             $firstBuffer = $firstBuffer->next;
             $cursor = 0;
@@ -84,17 +85,18 @@ class BufferedSource extends OuterSource
         return implode($accumulator);
     }
 
-    private function ensureVirtualBufferByteCount($byteCount, $allowIncomplete)
+    private function ensureVirtualBufferByteCount($byteCount, $minByteCount)
     {
-        while ($this->getVirtualBufferByteCount() < $byteCount)
-            if (!$this->readFromInnerSource(null, $allowIncomplete))
+        while (($bufsize = $this->getVirtualBufferByteCount()) < $byteCount)
+            if (!$this->readFromInnerSource(null, $bufsize >= $minByteCount))
                 return false;
         return true;
     }
 
     private function ensureRemainingBufferByteCount($byteCount, $allowIncomplete)
     {
-        return $this->ensureVirtualBufferByteCount($this->getConsumedByteCount() + $byteCount, $allowIncomplete);
+        $cursor = $this->getConsumedByteCount();
+        return $this->ensureVirtualBufferByteCount($cursor + $byteCount, $allowIncomplete ? ($cursor + 1) : ($cursor + $byteCount));
     }
 
     /** {@inheritdoc} */
@@ -133,7 +135,7 @@ class BufferedSource extends OuterSource
     /** {@inheritdoc} */
     public function wouldBlock($byteCount, $allowIncomplete = false)
     {
-        $remain = $this->getRemainingBufferByteCount()
+        $remain = $this->getRemainingBufferByteCount();
         if ($remain >= $byteCount || $remain > 0 && $allowIncomplete)
             return false;
         return $this->source->wouldBlock($byteCount - $remain, $allowIncomplete);
@@ -202,8 +204,9 @@ class BufferedSource extends OuterSource
             $this->checkByteCount($byteCount, $allowIncomplete, false);
             $effectiveByteCount = $byteCount;
             while ($byteCount > 0)
-                self::readFromSingleBuffer($byteCount, $this->firstBuffer, $this->cursor);
-            return $effectiveByteCount;
+                if (self::readFromSingleBuffer($byteCount, $this->firstBuffer, $this->cursor) === false)
+                    break;
+            return $effectiveByteCount - $byteCount;
         } else {
             $this->checkByteCount($byteCount, $allowIncomplete, true);
             $effectiveByteCount = $byteCount;
@@ -212,7 +215,7 @@ class BufferedSource extends OuterSource
                 if ($data === false)
                     break;
             }
-            if ($byteCount > 0) {
+            if ($byteCount > 0 && (!$allowIncomplete || !$this->source->wouldBlock($byteCount, $allowIncomplete))) {
                 $cursor = $this->getConsumedByteCount();
                 $skippedByteCount = $this->source->skip($byteCount, $allowIncomplete);
                 $this->firstBuffer = new BufferedSourceBuffer($cursor + $skippedByteCount);
@@ -222,7 +225,7 @@ class BufferedSource extends OuterSource
                     throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
                 return $effectiveByteCount + $skippedByteCount - $byteCount;
             } else
-                return $effectiveByteCount;
+                return $effectiveByteCount - $byteCount;
         }
     }
 }

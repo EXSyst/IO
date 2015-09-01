@@ -12,7 +12,7 @@ use EXSyst\Component\IO\StateInterface;
  *
  * @author Nicolas "Exter-N" L. <exter-n@exter-n.fr>
  */
-class StreamSourceState extends StateInterface
+class StreamSourceState implements StateInterface
 {
     private $stream;
     private $cursor;
