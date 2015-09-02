@@ -71,7 +71,7 @@ class Selectable implements SelectableInterface
                 throw new Exception\InvalidArgumentException('All the objects must be, or wrap, selectables');
             }
             $objectsByStream[intval($stream)] = $object;
-            $streams[] = $object;
+            $streams[] = $stream;
         }
     }
 
@@ -81,14 +81,14 @@ class Selectable implements SelectableInterface
      * @param array $readObjects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
      * @param array $writeObjects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
      * @param array $exceptObjects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
-     * @param float $seconds Maximum number of seconds to wait for at least one stream to fulfill the condition for which it is watched.
+     * @param float|null $seconds Maximum number of seconds to wait for at least one stream to fulfill the condition for which it is watched, or null to wait indefinitely.
      *
      * @return int Number of streams which actually fulfill the condition for which they are watched
      *
      * @throws Exception\InvalidArgumentException If all the sets are empty or any set contains anything else than selectables
      * @throws Exception\RuntimeException If an I/O operation fails
      */
-    public static function select(array &$readObjects, array &$writeObjects, array &$exceptObjects, $seconds = 0)
+    public static function select(array &$readObjects, array &$writeObjects, array &$exceptObjects, $seconds)
     {
         if (count($readObjects) == 0 && count($writeObjects) == 0 && count($exceptObjects) == 0) {
             throw new Exception\InvalidArgumentException('You must pass at least one object');
@@ -102,13 +102,21 @@ class Selectable implements SelectableInterface
         $exceptObjectsByStream = [ ];
         $exceptStreams = [ ];
         self::preprocessSet($exceptObjects, $exceptObjectsByStream, $exceptStreams);
-        $retval = stream_select($readStreams, $writeStreams, $exceptStreams, intval($seconds), intval(fmod($seconds, 1) * 1000000));
+        $retval = stream_select($readStreams, $writeStreams, $exceptStreams, ($seconds === null) ? null : intval($seconds), ($seconds === null) ? 0 : intval(fmod($seconds, 1) * 1000000));
         if ($retval === false) {
             throw new Exception\RuntimeException('An I/O error occurred');
         }
-        $objects = [ ];
-        foreach ($streams as $stream) {
-            $objects[] = $objectsByStream[intval($stream)];
+        $readObjects = [ ];
+        foreach ($readStreams as $stream) {
+            $readObjects[] = $readObjectsByStream[intval($stream)];
+        }
+        $writeObjects = [ ];
+        foreach ($writeStreams as $stream) {
+            $writeObjects[] = $writeObjectsByStream[intval($stream)];
+        }
+        $exceptObjects = [ ];
+        foreach ($exceptStreams as $stream) {
+            $exceptObjects[] = $exceptObjectsByStream[intval($stream)];
         }
 
         return $retval;
@@ -118,14 +126,14 @@ class Selectable implements SelectableInterface
      * Watches for incoming data in one or many streams.
      *
      * @param array $objects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
-     * @param float $seconds Maximum number of seconds to wait for at least one stream to have incoming data.
+     * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming data, or null to wait indefinitely.
      *
      * @return int Number of streams which actually have incoming data
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException If an I/O operation fails
      */
-    public static function selectRead(array &$objects, $seconds = 0)
+    public static function selectRead(array &$objects, $seconds)
     {
         $dummyW = [ ];
         $dummyE = [ ];
@@ -137,14 +145,14 @@ class Selectable implements SelectableInterface
      * Watches for ability to write to one or many streams.
      *
      * @param array $objects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
-     * @param float $seconds Maximum number of seconds to wait for at least one stream to be able to be written to.
+     * @param float|null $seconds Maximum number of seconds to wait for at least one stream to be able to be written to, or null to wait indefinitely.
      *
      * @return int Number of streams which can actually be written to
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException If an I/O operation fails
      */
-    public static function selectWrite(array &$objects, $seconds = 0)
+    public static function selectWrite(array &$objects, $seconds)
     {
         $dummyR = [ ];
         $dummyE = [ ];
@@ -156,14 +164,14 @@ class Selectable implements SelectableInterface
      * Watches for incoming high-priority exceptional ("out-of-band") data in one or many streams.
      *
      * @param array $objects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
-     * @param float $seconds Maximum number of seconds to wait for at least one stream to have incoming high-priority data.
+     * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming high-priority data, or null to wait indefinitely.
      *
      * @return int Number of streams which actually have incoming high-priority data
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException If an I/O operation fails
      */
-    public static function selectExcept(array &$objects, $seconds = 0)
+    public static function selectExcept(array &$objects, $seconds)
     {
         $dummyR = [ ];
         $dummyW = [ ];
