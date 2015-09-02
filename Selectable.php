@@ -71,7 +71,7 @@ class Selectable implements SelectableInterface
                 throw new Exception\InvalidArgumentException('All the objects must be, or wrap, selectables');
             }
             $objectsByStream[intval($stream)] = $object;
-            $streams[] = $object;
+            $streams[] = $stream;
         }
     }
 
@@ -106,9 +106,17 @@ class Selectable implements SelectableInterface
         if ($retval === false) {
             throw new Exception\RuntimeException('An I/O error occurred');
         }
-        $objects = [ ];
-        foreach ($streams as $stream) {
-            $objects[] = $objectsByStream[intval($stream)];
+        $readObjects = [ ];
+        foreach ($readStreams as $stream) {
+            $readObjects[] = $readObjectsByStream[intval($stream)];
+        }
+        $writeObjects = [ ];
+        foreach ($writeStreams as $stream) {
+            $writeObjects[] = $writeObjectsByStream[intval($stream)];
+        }
+        $exceptObjects = [ ];
+        foreach ($exceptStreams as $stream) {
+            $exceptObjects[] = $exceptObjectsByStream[intval($stream)];
         }
 
         return $retval;
