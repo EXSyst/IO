@@ -2,6 +2,8 @@
 
 namespace EXSyst\Component\IO\Sink;
 
+use EXSyst\Component\IO\Exception;
+
 class TeeSink implements SinkInterface
 {
     /**
@@ -18,7 +20,7 @@ class TeeSink implements SinkInterface
     {
         foreach ($sinks as $sink) {
             if (!($sink instanceof SinkInterface)) {
-                throw new Exception\InvalidArgumentException('The sub-sinks must be sinks');
+                throw new Exception\InvalidArgumentException('The sub-sinks must be instanceof EXSyst\Component\IO\Sink\SinkInterface');
             }
         }
         $this->sinks = array_values($sinks);
@@ -43,13 +45,13 @@ class TeeSink implements SinkInterface
             $blksize = $sink->getBlockByteCount();
             $a = $carry;
             $b = $blksize;
-            while ($b != 0) {
+            while ($b != 0) { // Calc greateast common divisor
                 $m = $a % $b;
                 $a = $b;
                 $b = $m;
             }
 
-            return $carry * $blksize / $a;
+            return $carry * $blksize / $a; // least common multiple
         }, 1);
     }
 
