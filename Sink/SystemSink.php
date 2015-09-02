@@ -9,7 +9,7 @@ final class SystemSink implements SinkInterface
     /**
      * @var int
      */
-    private $written;
+    public $written;
 
     /**
      * @var SystemSink
@@ -52,6 +52,7 @@ final class SystemSink implements SinkInterface
     public function write($data)
     {
         echo $data;
+        $this->written += strlen($data);
 
         return $this;
     }

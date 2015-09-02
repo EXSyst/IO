@@ -67,6 +67,7 @@ class TeeSink implements SinkInterface
         foreach ($this->sinks as $sink) {
             $sink->write($data);
         }
+        $this->written += strlen($data);
 
         return $this;
     }

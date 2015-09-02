@@ -61,7 +61,7 @@ final class Sink
     {
         $args = array_slice(func_get_args(), 2);
         if ($sink instanceof SystemSink) {
-            vprintf($format, $args);
+            $sink->written += vprintf($format, $args);
         } elseif ($sink instanceof StreamSource) {
             vfprintf($sink->getStream(), $format, $args);
         } else {
