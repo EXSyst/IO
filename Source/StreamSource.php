@@ -3,11 +3,12 @@
 namespace EXSyst\Component\IO\Source;
 
 use EXSyst\Component\IO\Exception;
+use EXSyst\Component\IO\SelectableInterface;
 use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\Source\Internal\StreamSourceState;
 
-class StreamSource implements SinkInterface, SourceInterface
+class StreamSource implements SelectableInterface, SinkInterface, SourceInterface
 {
     /**
      * @var string

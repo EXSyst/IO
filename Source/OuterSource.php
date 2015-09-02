@@ -43,6 +43,30 @@ abstract class OuterSource implements SourceInterface
     }
 
     /**
+     * Gets the outermost source which extends or implements a given type.
+     *
+     * @param string $type A type name
+     *
+     * @return SourceInterface|null The outermost source which extends or implements the given type, or null if there is none
+     *
+     * @api
+     */
+    public function getSourceByType($type)
+    {
+        $source = $this->source;
+        while ($source instanceof self) {
+            if ($source instanceof $type) {
+                return $source;
+            }
+            $source = $source->source;
+        }
+
+        if ($source instanceof $type) {
+            return $source;
+        }
+    }
+
+    /**
      * Gets the innermost source.
      *
      * @return SourceInterface The innermost source
