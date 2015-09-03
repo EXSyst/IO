@@ -34,7 +34,7 @@ class JsonReader extends OuterSource
         $this->source->eatWhiteSpace();
         try {
             $num = $this->source->eatSpan('+-.0123456789Ee');
-            if (!strlen($num)) {
+            if (strlen($num)) {
                 return $num;
             }
             if ($this->source->eat('"')) {
