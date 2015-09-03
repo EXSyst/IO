@@ -64,7 +64,7 @@ class JsonChannel implements ChannelInterface
     /** {@inheritdoc} */
     public function sendMessage($message)
     {
-        $this->sink->write(json_encode($message, $this->encoderOptions, $this->depth));
+        $this->sink->write(json_encode($message, $this->encoderOptions, $this->depth) . "\n");
         return $this;
     }
 

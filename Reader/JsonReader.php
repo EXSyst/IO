@@ -33,12 +33,8 @@ class JsonReader extends OuterSource
     {
         $this->source->eatWhiteSpace();
         try {
-            $kw = $this->source->eatAny(['false', 'null', 'true']);
-            if ($kw !== null) {
-                return $kw;
-            }
             $num = $this->source->eatSpan('+-.0123456789Ee');
-            if (!empty($num)) {
+            if (!strlen($num)) {
                 return $num;
             }
             if ($this->source->eat('"')) {
@@ -96,6 +92,10 @@ class JsonReader extends OuterSource
                 }
 
                 return '{'.implode(',', $subs).'}';
+            }
+            $kw = $this->source->eatAny(['null', 'true', 'false']);
+            if ($kw !== null) {
+                return $kw;
             }
             throw new Exception\RuntimeException('Invalid JSON data');
         } finally {
