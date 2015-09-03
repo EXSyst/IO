@@ -68,4 +68,21 @@ final class Sink
             $sink->write(vsprintf($format, $args));
         }
     }
+
+    public static function varDump(SinkInterface $sink/*, ...$expressions */)
+    {
+        ob_start();
+        call_user_func_array('var_dump', array_slice(func_get_args(), 1));
+        $sink->write(ob_get_clean());
+    }
+
+    public static function varExport(SinkInterface $sink, $expression)
+    {
+        $sink->write(var_export($expression, true));
+    }
+
+    public static function printR(SinkInterface $sink, $expression)
+    {
+        $sink->write(print_r($expression, true));
+    }
 }
