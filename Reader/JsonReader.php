@@ -18,7 +18,7 @@ class JsonReader extends OuterSource
         if ($json == 'null') {
             return;
         }
-        $value = json_decode($json);
+        $value = json_decode($json, $assoc, $depth, $options);
         if ($value === null) {
             throw new Exception\RuntimeException('Invalid JSON data');
         }
