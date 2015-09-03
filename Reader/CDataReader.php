@@ -39,7 +39,7 @@ class CDataReader extends OuterSource
         } catch (Exception\UnderflowException $e) {
             return false;
         }
-        if ($data != $src) {
+        if ($data != $string) {
             return false;
         }
         $src->skip($len);
@@ -57,7 +57,7 @@ class CDataReader extends OuterSource
         } catch (Exception\UnderflowException $e) {
             return;
         }
-        if (strcasecmp($data, $src)) {
+        if (strcasecmp($data, $string)) {
             return;
         }
         $src->skip($len);

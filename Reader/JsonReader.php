@@ -32,6 +32,9 @@ class JsonReader extends OuterSource
     public function readJsonValue($depth = 512, $inner = false)
     {
         $this->source->eatWhiteSpace();
+        if (!$inner && $this->source->isFullyConsumed()) {
+            throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+        }
         try {
             $num = $this->source->eatSpan('+-.0123456789Ee');
             if (strlen($num)) {
@@ -48,6 +51,7 @@ class JsonReader extends OuterSource
                             throw new Exception\RuntimeException('Invalid JSON data');
                         }
                         $parts[] = '"';
+                        break;
                     }
                 }
 
