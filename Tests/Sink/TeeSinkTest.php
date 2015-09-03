@@ -115,7 +115,7 @@ class TeeSinkTest extends AbstractSinkTest
         );
     }
 
-    public testFlush() {
+    public function testFlush() {
         $mockedSink1 = $this->createMockedSink();
         $mockedSink1
             ->expects($this->once())
