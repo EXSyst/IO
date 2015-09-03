@@ -18,32 +18,35 @@ class TeeSinkTest extends AbstractSinkTest
      * @expectedException EXSyst\Component\IO\Exception\InvalidArgumentException
      * @expectedExceptionMessage The sub-sinks must be instanceof EXSyst\Component\IO\Sink\SinkInterface
      */
-    public function testCreationWithAnInvalidSink() {
+    public function testCreationWithAnInvalidSink()
+    {
         $this->sinkBuilder
-            ->setConstructorArgs([ array(
+            ->setConstructorArgs([array(
                 $this->createMockedSink(),
-                new \stdClass()
+                new \stdClass(),
             )])
             ->getMock();
     }
 
-    public function testDefaultValues() {
+    public function testDefaultValues()
+    {
         $mockedSink1 = $this->createMockedSink();
         $mockedSink2 = $this->createMockedSink();
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs([ array('s1' => $mockedSink1, 'foo' => $mockedSink2)])
+            ->setConstructorArgs([array('s1' => $mockedSink1, 'foo' => $mockedSink2)])
             ->getMock();
 
-        $this->assertEquals([ $mockedSink1, $mockedSink2 ], \PHPUnit_Framework_Assert::readAttribute($sink, 'sinks'));
-        $this->assertEquals([ $mockedSink1, $mockedSink2 ], $sink->getSinks());
+        $this->assertEquals([$mockedSink1, $mockedSink2], \PHPUnit_Framework_Assert::readAttribute($sink, 'sinks'));
+        $this->assertEquals([$mockedSink1, $mockedSink2], $sink->getSinks());
         $this->assertEquals(0, \PHPUnit_Framework_Assert::readAttribute($sink, 'written'));
 
         $sink = $this->sinkBuilder->setConstructorArgs(array([]))->getMock();
         $this->assertEquals(1, $sink->getBlockByteCount());
     }
 
-    public function testBlockSizeGetter() {
+    public function testBlockSizeGetter()
+    {
         $mockedSink1 = $this->createMockedSink();
         $mockedSink1
             ->expects($this->once())
@@ -63,13 +66,14 @@ class TeeSinkTest extends AbstractSinkTest
             ->willReturn(3240);
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs([ array($mockedSink1, $mockedSink2, $mockedSink3) ])
+            ->setConstructorArgs([array($mockedSink1, $mockedSink2, $mockedSink3)])
             ->getMock();
 
         $this->assertEquals(91932249240, $sink->getBlockByteCount());
     }
 
-    public function testBlockRemainingBytesCountGetter() {
+    public function testBlockRemainingBytesCountGetter()
+    {
         $firstWrite = $this->getRandomData(200);
         $secondWrite = $this->getRandomData(57);
 
@@ -100,7 +104,7 @@ class TeeSinkTest extends AbstractSinkTest
             );
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs(array([ $mockedSink1, $mockedSink2 ]))
+            ->setConstructorArgs(array([$mockedSink1, $mockedSink2]))
             ->getMock();
 
         $blockByteCount = 46008;
@@ -115,7 +119,8 @@ class TeeSinkTest extends AbstractSinkTest
         );
     }
 
-    public function testFlush() {
+    public function testFlush()
+    {
         $mockedSink1 = $this->createMockedSink();
         $mockedSink1
             ->expects($this->once())
@@ -127,7 +132,7 @@ class TeeSinkTest extends AbstractSinkTest
             ->method('flush');
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs(array([ $mockedSink1, $mockedSink2 ]))
+            ->setConstructorArgs(array([$mockedSink1, $mockedSink2]))
             ->getMock();
 
         $sink->flush();

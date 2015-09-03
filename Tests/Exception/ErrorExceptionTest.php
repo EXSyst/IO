@@ -2,6 +2,8 @@
 
 namespace EXSyst\Component\IO\Tests\Exception;
 
+use EXSyst\Component\IO\Exception\ErrorException;
+
 /**
  * @author Ener-Getick <egetick@gmail.com>
  */
@@ -9,7 +11,7 @@ class ErrorExceptionTest extends AbstractExceptionTest
 {
     public function setUp()
     {
-        $this->exception = $this->getMock('EXSyst\Component\IO\Exception\ErrorException');
+        $this->exception = new ErrorException();
     }
 
     public function testInheritance()

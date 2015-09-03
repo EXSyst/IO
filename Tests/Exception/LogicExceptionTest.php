@@ -2,6 +2,8 @@
 
 namespace EXSyst\Component\IO\Tests\Exception;
 
+use EXSyst\Component\IO\Exception\LogicException;
+
 /**
  * @author Ener-Getick <egetick@gmail.com>
  */
@@ -9,7 +11,7 @@ class LogicExceptionTest extends AbstractExceptionTest
 {
     public function setUp()
     {
-        $this->exception = $this->getMock('EXSyst\Component\IO\Exception\LogicException');
+        $this->exception = new LogicException();
     }
 
     public function testInheritance()

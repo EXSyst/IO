@@ -2,6 +2,8 @@
 
 namespace EXSyst\Component\IO\Tests\Exception;
 
+use EXSyst\Component\IO\Exception\LengthException;
+
 /**
  * @author Ener-Getick <egetick@gmail.com>
  */
@@ -9,7 +11,7 @@ class LengthExceptionTest extends AbstractExceptionTest
 {
     public function setUp()
     {
-        $this->exception = $this->getMock('EXSyst\Component\IO\Exception\LengthException');
+        $this->exception = new LengthException();
     }
 
     public function testInheritance()
