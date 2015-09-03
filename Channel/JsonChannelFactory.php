@@ -12,7 +12,7 @@ class JsonChannelFactory implements ChannelFactoryInterface
      */
     private $encoderOptions;
     /**
-     * @var boolean
+     * @var bool
      */
     private $assoc;
     /**
@@ -27,10 +27,10 @@ class JsonChannelFactory implements ChannelFactoryInterface
     /**
      * Constructor.
      *
-     * @param int $encoderOptions Options to pass to {@link http://php.net/json_encode json_encode}
-     * @param boolean $assoc true to decode JSON associative arrays into PHP associative arrays, false to decode them into PHP objects
-     * @param int $depth Maximum JSON nesting depth to allow
-     * @param int $decoderOptions Options to pass to {@link http://php.net/json_encode json_decode}
+     * @param int  $encoderOptions Options to pass to {@link http://php.net/json_encode json_encode}
+     * @param bool $assoc          true to decode JSON associative arrays into PHP associative arrays, false to decode them into PHP objects
+     * @param int  $depth          Maximum JSON nesting depth to allow
+     * @param int  $decoderOptions Options to pass to {@link http://php.net/json_encode json_decode}
      */
     public function __construct($encoderOptions = 0, $assoc = false, $depth = 512, $decoderOptions = 0)
     {

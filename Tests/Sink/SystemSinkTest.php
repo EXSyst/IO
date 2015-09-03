@@ -58,7 +58,6 @@ class SystemSinkTest extends AbstractSinkTest
         $this->assertEquals($data, ob_get_clean());
         $this->assertEquals(SystemSink::BLOCK_BYTE_COUNT + 64, \PHPUnit_Framework_Assert::readAttribute($sink, 'written'));
         $this->assertEquals(SystemSink::BLOCK_BYTE_COUNT - 64 % SystemSink::BLOCK_BYTE_COUNT, $sink->getBlockRemainingByteCount());
-
     }
 }
 

@@ -23,7 +23,7 @@ class SerializedChannel implements ChannelInterface
      * Constructor.
      *
      * @param SourceInterface $source The source which will be used to receive messages
-     * @param SinkInterface $sink The sink which will be used to send messages
+     * @param SinkInterface   $sink   The sink which will be used to send messages
      */
     public function __construct(SourceInterface $source, SinkInterface $sink)
     {
@@ -41,6 +41,7 @@ class SerializedChannel implements ChannelInterface
     public function sendMessage($message)
     {
         $this->sink->write(serialize($message));
+
         return $this;
     }
 

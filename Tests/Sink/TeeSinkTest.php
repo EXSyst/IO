@@ -114,4 +114,22 @@ class TeeSinkTest extends AbstractSinkTest
             $sink->getBlockRemainingByteCount()
         );
     }
+
+    public testFlush() {
+        $mockedSink1 = $this->createMockedSink();
+        $mockedSink1
+            ->expects($this->once())
+            ->method('flush');
+
+        $mockedSink2 = $this->createMockedSink();
+        $mockedSink2
+            ->expects($this->once())
+            ->method('flush');
+
+        $sink = $this->sinkBuilder
+            ->setConstructorArgs(array([ $mockedSink1, $mockedSink2 ]))
+            ->getMock();
+
+        $sink->flush();
+    }
 }

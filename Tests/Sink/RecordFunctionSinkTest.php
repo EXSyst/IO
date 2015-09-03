@@ -7,10 +7,11 @@ namespace EXSyst\Component\IO\Tests;
  */
 class RecordFunctionSinkTest extends AbstractSinkTest
 {
-    public function setUp() {
+    public function setUp()
+    {
         $this->sinkBuilder = $this->getMockBuilder('EXSyst\Component\IO\Sink\RecordFunctionSink')
             ->setConstructorArgs(array(
-                function() {}
+                function () {},
             ))
             ->setMethods(null);
     }

@@ -9,35 +9,41 @@ abstract class AbstractSinkTest extends \PHPUnit_Framework_TestCase
 {
     protected $sinkBuilder;
 
-    public function testInterface() {
+    public function testInterface()
+    {
         $this->assertInstanceOf('EXSyst\Component\IO\Sink\SinkInterface', $this->sinkBuilder->getMock());
     }
 
-    public function testWriteReturnSelf() {
+    public function testWriteReturnSelf()
+    {
         $sink = $this->sinkBuilder->getMock();
         $this->assertEquals($sink, $sink->write(''));
     }
 
-    public function testFlushReturnSelf() {
+    public function testFlushReturnSelf()
+    {
         $sink = $this->sinkBuilder->getMock();
         $this->assertEquals($sink, $sink->flush());
     }
 
-    public function createMockedSink() {
+    public function createMockedSink()
+    {
         return $this->getMock('EXSyst\Component\IO\Sink\SinkInterface');
     }
 
     /**
-     * @var int $length
+     * @var int
      */
-    protected function getRandomData($length) {
+    protected function getRandomData($length)
+    {
         $characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz123456789';
         $charactersLength = strlen($characters);
 
         $randomData = '';
-        for ($i = 0; $i < $length; $i++) {
+        for ($i = 0; $i < $length; ++$i) {
             $randomData .= $characters[$i % $charactersLength];
         }
+
         return $randomData;
     }
 }

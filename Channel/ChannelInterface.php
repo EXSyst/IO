@@ -34,7 +34,7 @@ interface ChannelInterface extends SelectableInterface
      * @return mixed The received message
      *
      * @throws Exception\UnderflowException If the other task has closed the connection
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException   If an I/O operation fails
      *
      * @api
      */

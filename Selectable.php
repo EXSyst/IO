@@ -3,7 +3,6 @@
 namespace EXSyst\Component\IO;
 
 use EXSyst\Component\IO\Source\OuterSource;
-
 use React\EventLoop\LoopInterface;
 
 /**
@@ -78,43 +77,43 @@ class Selectable implements SelectableInterface
     /**
      * Watches for conditions in one or many streams.
      *
-     * @param array $readObjects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
-     * @param array $writeObjects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
-     * @param array $exceptObjects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
-     * @param float|null $seconds Maximum number of seconds to wait for at least one stream to fulfill the condition for which it is watched, or null to wait indefinitely.
+     * @param array      $readObjects   On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
+     * @param array      $writeObjects  On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
+     * @param array      $exceptObjects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
+     * @param float|null $seconds       Maximum number of seconds to wait for at least one stream to fulfill the condition for which it is watched, or null to wait indefinitely.
      *
      * @return int Number of streams which actually fulfill the condition for which they are watched
      *
      * @throws Exception\InvalidArgumentException If all the sets are empty or any set contains anything else than selectables
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException         If an I/O operation fails
      */
     public static function select(array &$readObjects, array &$writeObjects, array &$exceptObjects, $seconds)
     {
         if (count($readObjects) == 0 && count($writeObjects) == 0 && count($exceptObjects) == 0) {
             throw new Exception\InvalidArgumentException('You must pass at least one object');
         }
-        $readObjectsByStream = [ ];
-        $readStreams = [ ];
+        $readObjectsByStream = [];
+        $readStreams = [];
         self::preprocessSet($readObjects, $readObjectsByStream, $readStreams);
-        $writeObjectsByStream = [ ];
-        $writeStreams = [ ];
+        $writeObjectsByStream = [];
+        $writeStreams = [];
         self::preprocessSet($writeObjects, $writeObjectsByStream, $writeStreams);
-        $exceptObjectsByStream = [ ];
-        $exceptStreams = [ ];
+        $exceptObjectsByStream = [];
+        $exceptStreams = [];
         self::preprocessSet($exceptObjects, $exceptObjectsByStream, $exceptStreams);
         $retval = stream_select($readStreams, $writeStreams, $exceptStreams, ($seconds === null) ? null : intval($seconds), ($seconds === null) ? 0 : intval(fmod($seconds, 1) * 1000000));
         if ($retval === false) {
             throw new Exception\RuntimeException('An I/O error occurred');
         }
-        $readObjects = [ ];
+        $readObjects = [];
         foreach ($readStreams as $stream) {
             $readObjects[] = $readObjectsByStream[intval($stream)];
         }
-        $writeObjects = [ ];
+        $writeObjects = [];
         foreach ($writeStreams as $stream) {
             $writeObjects[] = $writeObjectsByStream[intval($stream)];
         }
-        $exceptObjects = [ ];
+        $exceptObjects = [];
         foreach ($exceptStreams as $stream) {
             $exceptObjects[] = $exceptObjectsByStream[intval($stream)];
         }
@@ -125,18 +124,18 @@ class Selectable implements SelectableInterface
     /**
      * Watches for incoming data in one or many streams.
      *
-     * @param array $objects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
+     * @param array      $objects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming data, or null to wait indefinitely.
      *
      * @return int Number of streams which actually have incoming data
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException         If an I/O operation fails
      */
     public static function selectRead(array &$objects, $seconds)
     {
-        $dummyW = [ ];
-        $dummyE = [ ];
+        $dummyW = [];
+        $dummyE = [];
 
         return self::select($objects, $dummyW, $dummyE, $seconds);
     }
@@ -144,18 +143,18 @@ class Selectable implements SelectableInterface
     /**
      * Watches for ability to write to one or many streams.
      *
-     * @param array $objects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
+     * @param array      $objects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to be able to be written to, or null to wait indefinitely.
      *
      * @return int Number of streams which can actually be written to
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException         If an I/O operation fails
      */
     public static function selectWrite(array &$objects, $seconds)
     {
-        $dummyR = [ ];
-        $dummyE = [ ];
+        $dummyR = [];
+        $dummyE = [];
 
         return self::select($dummyR, $objects, $dummyE, $seconds);
     }
@@ -163,18 +162,18 @@ class Selectable implements SelectableInterface
     /**
      * Watches for incoming high-priority exceptional ("out-of-band") data in one or many streams.
      *
-     * @param array $objects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
+     * @param array      $objects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming high-priority data, or null to wait indefinitely.
      *
      * @return int Number of streams which actually have incoming high-priority data
      *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @throws Exception\RuntimeException         If an I/O operation fails
      */
     public static function selectExcept(array &$objects, $seconds)
     {
-        $dummyR = [ ];
-        $dummyW = [ ];
+        $dummyR = [];
+        $dummyW = [];
 
         return self::select($dummyR, $dummyW, $objects, $seconds);
     }
@@ -182,10 +181,10 @@ class Selectable implements SelectableInterface
     /**
      * Registers a listener to be notified when a stream has incoming data (requires {@link https://packagist.org/packages/react/event-loop reactphp/event-loop}).
      *
-     * @param LoopInterface $loop Event loop in which to register the stream
-     * @param OuterSource|SelectableInterface $object An object wrapping the stream to register
-     * @param callable $listener A function to invoke when the stream has incoming data
-     * @param boolean $once true to invoke the listener only for the next event, false to invoke it for each subsequent event until it is manually unregistered
+     * @param LoopInterface                   $loop     Event loop in which to register the stream
+     * @param OuterSource|SelectableInterface $object   An object wrapping the stream to register
+     * @param callable                        $listener A function to invoke when the stream has incoming data
+     * @param bool                            $once     true to invoke the listener only for the next event, false to invoke it for each subsequent event until it is manually unregistered
      */
     public static function registerRead(LoopInterface $loop, $object, callable $listener, $once = false)
     {
@@ -204,10 +203,10 @@ class Selectable implements SelectableInterface
     /**
      * Registers a listener to be notified when a stream is able to be written to (requires {@link https://packagist.org/packages/react/event-loop reactphp/event-loop}).
      *
-     * @param LoopInterface $loop Event loop in which to register the stream
-     * @param OuterSource|SelectableInterface $object An object wrapping the stream to register
-     * @param callable $listener A function to invoke when the stream is able to be written to
-     * @param boolean $once true to invoke the listener only for the next event, false to invoke it for each subsequent event until it is manually unregistered
+     * @param LoopInterface                   $loop     Event loop in which to register the stream
+     * @param OuterSource|SelectableInterface $object   An object wrapping the stream to register
+     * @param callable                        $listener A function to invoke when the stream is able to be written to
+     * @param bool                            $once     true to invoke the listener only for the next event, false to invoke it for each subsequent event until it is manually unregistered
      */
     public static function registerWrite(LoopInterface $loop, $object, callable $listener, $once = false)
     {
@@ -226,7 +225,7 @@ class Selectable implements SelectableInterface
     /**
      * Unregisters the listener which was notified when a stream had incoming data (requires {@link https://packagist.org/packages/react/event-loop reactphp/event-loop}).
      *
-     * @param LoopInterface $loop Event loop from which to unregister the stream
+     * @param LoopInterface                   $loop   Event loop from which to unregister the stream
      * @param OuterSource|SelectableInterface $object An object wrapping the stream to unregister
      */
     public static function unregisterRead(LoopInterface $loop, $object)
@@ -241,7 +240,7 @@ class Selectable implements SelectableInterface
     /**
      * Unregisters the listener which was notified when a stream was able to be written to (requires {@link https://packagist.org/packages/react/event-loop reactphp/event-loop}).
      *
-     * @param LoopInterface $loop Event loop from which to unregister the stream
+     * @param LoopInterface                   $loop   Event loop from which to unregister the stream
      * @param OuterSource|SelectableInterface $object An object wrapping the stream to unregister
      */
     public static function unregisterWrite(LoopInterface $loop, $object)
@@ -256,7 +255,7 @@ class Selectable implements SelectableInterface
     /**
      * Unregisters the listener which was notified when a stream had incoming data or was able to be written to (requires {@link https://packagist.org/packages/react/event-loop reactphp/event-loop}).
      *
-     * @param LoopInterface $loop Event loop from which to unregister the stream
+     * @param LoopInterface                   $loop   Event loop from which to unregister the stream
      * @param OuterSource|SelectableInterface $object An object wrapping the stream to unregister
      */
     public static function unregister(LoopInterface $loop, $object)

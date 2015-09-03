@@ -29,8 +29,8 @@ class RecordFunctionSink implements SinkInterface
      * Constructor.
      *
      * @param callable $recordFunction
-     * @param mixed            $recordSeparator
-     * @param int|null         $recordSize
+     * @param mixed    $recordSeparator
+     * @param int|null $recordSize
      */
     public function __construct($recordFunction, $recordSeparator = PHP_EOL, $recordSize = null)
     {

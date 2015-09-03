@@ -23,7 +23,7 @@ class JsonChannel implements ChannelInterface
      */
     private $encoderOptions;
     /**
-     * @var boolean
+     * @var bool
      */
     private $assoc;
     /**
@@ -38,12 +38,12 @@ class JsonChannel implements ChannelInterface
     /**
      * Constructor.
      *
-     * @param SourceInterface $source The source which will be used to receive messages
-     * @param SinkInterface $sink The sink which will be used to send messages
-     * @param int $encoderOptions Options to pass to {@link http://php.net/json_encode json_encode}
-     * @param boolean $assoc true to decode JSON associative arrays into PHP associative arrays, false to decode them into PHP objects
-     * @param int $depth Maximum JSON nesting depth to allow
-     * @param int $decoderOptions Options to pass to {@link http://php.net/json_encode json_decode}
+     * @param SourceInterface $source         The source which will be used to receive messages
+     * @param SinkInterface   $sink           The sink which will be used to send messages
+     * @param int             $encoderOptions Options to pass to {@link http://php.net/json_encode json_encode}
+     * @param bool            $assoc          true to decode JSON associative arrays into PHP associative arrays, false to decode them into PHP objects
+     * @param int             $depth          Maximum JSON nesting depth to allow
+     * @param int             $decoderOptions Options to pass to {@link http://php.net/json_encode json_decode}
      */
     public function __construct(SourceInterface $source, SinkInterface $sink, $encoderOptions = 0, $assoc = false, $depth = 512, $decoderOptions = 0)
     {
@@ -64,7 +64,8 @@ class JsonChannel implements ChannelInterface
     /** {@inheritdoc} */
     public function sendMessage($message)
     {
-        $this->sink->write(json_encode($message, $this->encoderOptions, $this->depth) . "\n");
+        $this->sink->write(json_encode($message, $this->encoderOptions, $this->depth)."\n");
+
         return $this;
     }
 

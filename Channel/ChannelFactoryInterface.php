@@ -18,7 +18,7 @@ interface ChannelFactoryInterface
      * Creates a channel with a given source and sink, and the encoder/decoder specified by the current factory.
      *
      * @param SourceInterface $source The source which will be used to receive messages
-     * @param SinkInterface $sink The sink which will be used to send messages
+     * @param SinkInterface   $sink   The sink which will be used to send messages
      *
      * @return ChannelInterface The created channel
      *
