@@ -14,7 +14,7 @@ class JsonReader extends OuterSource
 
     public function readValue($assoc = false, $depth = 512, $options = 0)
     {
-        $json = $this->readJsonValue();
+        $json = $this->readJsonValue($depth);
         if ($json == 'null') {
             return;
         }
