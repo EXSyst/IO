@@ -82,12 +82,15 @@ class CDataReader extends OuterSource
         }
     }
 
-    public function eatSpan($mask, $length = null)
+    public function eatSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
         $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
         $sink = new StringSink();
         while (!isset($length) || $length > 0) {
+            if ($allowIncomplete && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($length) ? min($length, $blksize) : $blksize, true)) {
+                break;
+            }
             $data = $src->peek(isset($length) ? min($length, $blksize) : $blksize, true);
             if (empty($data)) {
                 break;
@@ -111,12 +114,15 @@ class CDataReader extends OuterSource
         return strval($sink);
     }
 
-    public function eatCSpan($mask, $length = null)
+    public function eatCSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
         $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
         $sink = new StringSink();
         while (!isset($length) || $length > 0) {
+            if ($allowIncomplete && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($length) ? min($length, $blksize) : $blksize, true)) {
+                break;
+            }
             $data = $src->peek(isset($length) ? min($length, $blksize) : $blksize, true);
             if (empty($data)) {
                 break;
@@ -140,9 +146,9 @@ class CDataReader extends OuterSource
         return strval($sink);
     }
 
-    public function eatWhiteSpace()
+    public function eatWhiteSpace($length = null, $allowIncomplete = false)
     {
-        return strlen($this->eatSpan(self::WHITE_SPACE_MASK));
+        return strlen($this->eatSpan(self::WHITE_SPACE_MASK, $length, $allowIncomplete));
     }
 
     public function eatToFullConsumption()

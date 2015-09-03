@@ -29,7 +29,7 @@ class JsonReader extends OuterSource
     /**
      * @return string
      */
-    public function readJsonValue($depth = 512)
+    public function readJsonValue($depth = 512, $inner = false)
     {
         $this->source->eatWhiteSpace();
         try {
@@ -63,7 +63,7 @@ class JsonReader extends OuterSource
                 }
                 $subs = [];
                 do {
-                    $subs[] = $this->readJsonValue($depth - 1);
+                    $subs[] = $this->readJsonValue($depth - 1, true);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != ']') {
                     throw new Exception\RuntimeException('Invalid JSON data');
@@ -81,11 +81,11 @@ class JsonReader extends OuterSource
                 }
                 $subs = [];
                 do {
-                    $key = $this->readJsonValue($depth - 1);
+                    $key = $this->readJsonValue($depth - 1, true);
                     if ($this->source->read(1) != ':') {
                         throw new Exception\RuntimeException('Invalid JSON data');
                     }
-                    $subs[] = $key.':'.$this->readJsonValue($depth - 1);
+                    $subs[] = $key.':'.$this->readJsonValue($depth - 1, true);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != '}') {
                     throw new Exception\RuntimeException('Invalid JSON data');
@@ -99,7 +99,7 @@ class JsonReader extends OuterSource
             }
             throw new Exception\RuntimeException('Invalid JSON data');
         } finally {
-            $this->source->eatWhiteSpace();
+            $this->source->eatWhiteSpace(null, !$inner);
         }
     }
 }
