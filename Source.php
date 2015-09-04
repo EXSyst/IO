@@ -18,11 +18,26 @@ final class Source
     {
     }
 
+    /**
+     * @param string   $string
+     * @param int      $start
+     * @param int|null $end
+     *
+     * @return StringSource
+     */
     public static function fromString($string, $start = 0, $end = null)
     {
         return new StringSource($string, $start, $end);
     }
 
+    /**
+     * @param resource      $stream
+     * @param bool          $streamOwner
+     * @param callable|null $onClose
+     * @param bool          $buffered
+     *
+     * @return StreamSource|BufferedSource
+     */
     public static function fromStream($stream, $streamOwner = false, $onClose = null, $buffered = true)
     {
         try {
@@ -43,6 +58,14 @@ final class Source
         return $src;
     }
 
+    /**
+     * @param string        $file
+     * @param string        $mode
+     * @param callable|null $onClose
+     * @param bool          $buffered
+     *
+     * @return StreamSource|BufferedSource
+     */
     public static function fromFile($file, $mode = 'rb', $onClose = null, $buffered = true)
     {
         set_error_handler(function ($errno, $errstr, $errfile, $errline) {
@@ -57,11 +80,21 @@ final class Source
         return self::fromStream($fd, true, $onClose, $buffered);
     }
 
+    /**
+     * @return StreamSource|BufferedSource
+     */
     public static function fromInput()
     {
         return (PHP_SAPI == 'cli') ? self::fromStream(STDIN) : self::fromFile('php://input');
     }
 
+    /**
+     * @param SourceInterface $source
+     * @param callable        $transactionFn
+     * @param bool            $restoreOnFalsyReturn
+     *
+     * @return mixed $transactionFn return
+     */
     public static function transact(SourceInterface $source, $transactionFn, $restoreOnFalsyReturn = false)
     {
         if (!is_callable($transactionFn)) {
@@ -81,6 +114,10 @@ final class Source
         return $retval;
     }
 
+    /**
+     * @param SourceInterface $source
+     * @param SinkInterface   $sink
+     */
     public static function pipe(SourceInterface $source, SinkInterface $sink)
     {
         $blksize = max($source->getBlockByteCount(), self::MIN_BLOCK_BYTE_COUNT);
@@ -93,6 +130,11 @@ final class Source
         }
     }
 
+    /**
+     * @param SourceInterface $source
+     *
+     * @return string
+     */
     public static function getContents(SourceInterface $source)
     {
         return CDataReader::fromSource($source)->eatToFullConsumption();

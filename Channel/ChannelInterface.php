@@ -20,7 +20,7 @@ interface ChannelInterface extends SelectableInterface
      *
      * @param mixed $message The message to send
      *
-     * @return self
+     * @return $this
      *
      * @throws Exception\RuntimeException If an I/O operation fails
      *

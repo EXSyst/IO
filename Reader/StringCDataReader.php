@@ -6,6 +6,9 @@ use EXSyst\Component\IO\Source\StringSource;
 
 class StringCDataReader extends CDataReader
 {
+    /**
+     * @param StringSource $source
+     */
     public function __construct(StringSource $source)
     {
         parent::__construct($source);
@@ -86,6 +89,12 @@ class StringCDataReader extends CDataReader
         return $str;
     }
 
+    /**
+     * @param string $pcrePattern
+     * @param int    $flags
+     *
+     * @return array|null
+     */
     public function eatRegex($pcrePattern, $flags = 0)
     {
         $src = $this->source;
@@ -121,6 +130,9 @@ class StringCDataReader extends CDataReader
         return $matches;
     }
 
+    /**
+     * @return string This object's string representation
+     */
     public function __toString()
     {
         return $this->source->data;

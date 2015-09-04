@@ -13,6 +13,11 @@ class CDataReader extends OuterSource
 {
     const WHITE_SPACE_MASK = "\011\n\013\014\r ";
 
+    /**
+     * @param SourceInterface
+     *
+     * @return CDataReader
+     */
     public static function fromSource(SourceInterface $source)
     {
         if ($source instanceof self) {
@@ -24,11 +29,23 @@ class CDataReader extends OuterSource
         }
     }
 
+    /**
+     * @param string   $string
+     * @param int      $start
+     * @param int|null $end
+     *
+     * @return StringCDataReader
+     */
     public static function fromString($string, $start = 0, $end = null)
     {
         return new StringCDataReader(new StringSource($string, $start, $end));
     }
 
+    /**
+     * @param string $string
+     *
+     * @return bool
+     */
     public function eat($string)
     {
         $string = strval($string);
@@ -47,6 +64,11 @@ class CDataReader extends OuterSource
         return true;
     }
 
+    /**
+     * @param string $string
+     *
+     * @return string|null
+     */
     public function eatCaseInsensitive($string)
     {
         $string = strval($string);
@@ -65,6 +87,12 @@ class CDataReader extends OuterSource
         return $data;
     }
 
+    /**
+     * @param string[]|\Traversable $strings
+     * @param bool                  $caseInsensitive
+     *
+     * @return string|null
+     */
     public function eatAny($strings, $caseInsensitive = false)
     {
         if ($caseInsensitive) {
@@ -82,6 +110,13 @@ class CDataReader extends OuterSource
         }
     }
 
+    /**
+     * @param string   $mask
+     * @param int|null $length
+     * @param bool     $allowIncomplete
+     *
+     * @return string
+     */
     public function eatSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
@@ -114,6 +149,13 @@ class CDataReader extends OuterSource
         return strval($sink);
     }
 
+    /**
+     * @param string   $mask
+     * @param int|null $length
+     * @param bool     $allowIncomplete
+     *
+     * @return string
+     */
     public function eatCSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
@@ -146,11 +188,20 @@ class CDataReader extends OuterSource
         return strval($sink);
     }
 
+    /**
+     * @param int|null $length
+     * @param bool     $allowIncomplete
+     *
+     * @return int
+     */
     public function eatWhiteSpace($length = null, $allowIncomplete = false)
     {
         return strlen($this->eatSpan(self::WHITE_SPACE_MASK, $length, $allowIncomplete));
     }
 
+    /**
+     * @return string
+     */
     public function eatToFullConsumption()
     {
         $sink = new StringSink();

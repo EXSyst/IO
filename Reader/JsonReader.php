@@ -7,11 +7,26 @@ use EXSyst\Component\IO\Source\OuterSource;
 
 class JsonReader extends OuterSource
 {
+    /**
+     * Constructor.
+     *
+     * @param CDataReader $source
+     */
     public function __construct(CDataReader $source)
     {
         parent::__construct($source);
     }
 
+    /**
+     * @param bool $assoc
+     * @param int  $depth
+     * @param int  $options
+     *
+     * @return string|null
+     *
+     * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
+     * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested
+     */
     public function readValue($assoc = false, $depth = 512, $options = 0)
     {
         $json = $this->readJsonValue($depth);
@@ -27,7 +42,13 @@ class JsonReader extends OuterSource
     }
 
     /**
-     * @return string
+     * @param int  $depth
+     * @param bool $inner
+     *
+     * @return string|null
+     *
+     * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
+     * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested
      */
     public function readJsonValue($depth = 512, $inner = false)
     {

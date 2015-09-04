@@ -7,11 +7,21 @@ use EXSyst\Component\IO\Source\OuterSource;
 
 class SerializedReader extends OuterSource
 {
+    /**
+     * Constructor.
+     *
+     * @param CDataReader $source
+     */
     public function __construct(CDataReader $source)
     {
         parent::__construct($source);
     }
 
+    /**
+     * @return mixed
+     *
+     * @throws Exception\RuntimeException when serialized data is invalid
+     */
     public function readValue()
     {
         $serialized = $this->readSerializedValue();
@@ -26,6 +36,9 @@ class SerializedReader extends OuterSource
         return $value;
     }
 
+    /**
+     * @return string
+     */
     public function readSerializedValue()
     {
         $parts = [$this->source->eatCSpan(':;')];

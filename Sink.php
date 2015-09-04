@@ -6,6 +6,7 @@ use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Sink\RecordFunctionSink;
 use EXSyst\Component\IO\Sink\SystemSink;
 use EXSyst\Component\IO\Source\StreamSource;
+use EXSyst\Component\IO\Source\BufferedSource;
 
 final class Sink
 {
@@ -13,26 +14,53 @@ final class Sink
     {
     }
 
+    /**
+     * @param resource      $stream
+     * @param bool          $streamOwner
+     * @param callable|null $onClose
+     *
+     * @return StreamSource
+     */
     public static function fromStream($stream, $streamOwner = false, $onClose = null)
     {
         return Source::fromStream($stream, $streamOwner, $onClose, false);
     }
 
+    /**
+     * @param string        $file
+     * @param string        $mode
+     * @param callable|null $onClose
+     *
+     * @return StreamSource|BufferedSource
+     */
     public static function fromFile($file, $mode = 'wb', $onClose = null)
     {
         return Source::fromFile($file, $mode, $onClose, false);
     }
 
+    /**
+     * @return SystemSink
+     */
     public static function fromOutput()
     {
         return SystemSink::getInstance();
     }
 
+    /**
+     * @return StreamSource
+     */
     public static function fromError()
     {
         return self::fromStream(STDERR);
     }
 
+    /**
+     * @param int         $messageType
+     * @param string|null $destination
+     * @param string|null $extraHeaders
+     *
+     * @return RecordFunctionSink
+     */
     public static function fromLog($messageType = 0, $destination = null, $extraHeaders = null)
     {
         if ($extraHeaders !== null) {
@@ -52,11 +80,20 @@ final class Sink
         return new RecordFunctionSink($fn);
     }
 
+    /**
+     * @param SinkInterface $sink
+     * @param string        $data
+     */
     public static function writeLine(SinkInterface $sink, $data)
     {
         $sink->write($data.PHP_EOL);
     }
 
+    /**
+     * @param SinkInterface $sink
+     * @param string        $format
+     * @param mixed         $arg,...
+     */
     public static function writeFormatted(SinkInterface $sink, $format)
     {
         $args = array_slice(func_get_args(), 2);
@@ -69,6 +106,10 @@ final class Sink
         }
     }
 
+    /**
+     * @param SinkInterface $sink
+     * @param mixed         $arg,...
+     */
     public static function varDump(SinkInterface $sink/*, ...$expressions */)
     {
         ob_start();
@@ -76,11 +117,19 @@ final class Sink
         $sink->write(ob_get_clean());
     }
 
+    /**
+     * @param SinkInterface $sink
+     * @param mixed         $expression
+     */
     public static function varExport(SinkInterface $sink, $expression)
     {
         $sink->write(var_export($expression, true));
     }
 
+    /**
+     * @param SinkInterface $sink
+     * @param mixed         $expression
+     */
     public static function printR(SinkInterface $sink, $expression)
     {
         $sink->write(print_r($expression, true));
