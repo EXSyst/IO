@@ -36,14 +36,14 @@ The ```Reader``` objects (which do not implement any specific interface, as they
 - ```CDataReader```s can be used to ease the writing of lexers : they support ```eat```ing fixed strings, strings including or excluding only given character classes, and white space ;
 - ```StringCDataReader```s are ```CDataReader```s optimized for ```StringSource```s, which additionally suppport ```eat```ing strings matching a regular expression (using ```preg_match```) ;
 - ```SerializedReader```s can be used to separate concatenated ```serialize```d values (as in ```serialize($foo).serialize($bar)```), regardless of whether they come from a local ```Source``` (such as a string or a file stream) or a remote one (such as a pipe or network stream) ; they are explicitly designed to work efficiently with remote ```Source```s ;
-- ```JsonReader```s can be used to separate concatenated JSON (as specified by RFC 7159) values, in the same conditions as ```SerializedReader```.
+- ```JsonReader```s can be used to separate concatenated JSON (as specified by [RFC 7159](https://tools.ietf.org/html/rfc7159)) values, in the same conditions as ```SerializedReader```.
 
 It is recommended to create ```CDataReader```s using the ```fromSource``` static method : it will automatically prefer an optimized implementation (such as ```StringCDataReader```) when applicable.
 
 ## ```Channel```s
 The ```Channel``` objects (objects implementing ```ChannelInterface```) can be used to communicate with remote tasks using messages, which will be serialized if necessary :
 - ```SerializedChannel```s serialize the messages using the native PHP format (with ```serialize```) ;
-- ```JsonChannel```s serialize the messages using JSON (as specified by RFC 7159).
+- ```JsonChannel```s serialize the messages using JSON (as specified by [RFC 7159](https://tools.ietf.org/html/rfc7159)).
 
 The ```ChannelFactory``` objects (objects implementing ```ChannelFactoryInterface```) can be used by an application or a library to specify an encoder/decoder couple, along with their parameters, to another library.
 
