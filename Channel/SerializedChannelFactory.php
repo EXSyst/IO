@@ -5,7 +5,7 @@ namespace EXSyst\Component\IO\Channel;
 use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Source\SourceInterface;
 
-class SerializedChannelFactory implements ChannelFactoryInterface
+final class SerializedChannelFactory implements ChannelFactoryInterface
 {
     /**
      * @var SerializedChannelFactory

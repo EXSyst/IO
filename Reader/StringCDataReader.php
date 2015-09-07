@@ -62,6 +62,7 @@ class StringCDataReader extends CDataReader
     /** {@inheritdoc} */
     public function eatCSpan($mask, $length = null)
     {
+        $src = $this->source;
         $maxLength = $src->end - $src->offset;
         $length = ($length === null) ? $maxLength : min($length, $maxLength);
         $length = strcspn($src->data, $mask, $src->offset, $length);

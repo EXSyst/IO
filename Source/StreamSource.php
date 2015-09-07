@@ -11,7 +11,7 @@ use EXSyst\Component\IO\Source\Internal\StreamSourceState;
 class StreamSource implements SelectableInterface, SinkInterface, SourceInterface
 {
     /**
-     * @var string
+     * @var resource
      */
     private $stream;
     /**
