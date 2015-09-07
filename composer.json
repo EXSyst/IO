@@ -13,10 +13,11 @@
         "php": ">=5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "~4.1"
+        "phpunit/phpunit": "~4.1",
+        "react/event-loop": ">=0.1"
     },
     "suggest": {
-        "reactphp/event-loop": "Evented I/O : allows being called back when a stream has available data, instead of having to poll it yourself"
+        "react/event-loop": "Evented I/O : allows being called back when a stream has available data, instead of having to poll it yourself"
     },
     "autoload": {
         "psr-0": {
