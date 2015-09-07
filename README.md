@@ -1,5 +1,5 @@
-[![Build Status](https://scrutinizer-ci.com/g/EXSyst/IO/badges/build.png?b=master)](https://scrutinizer-ci.com/g/EXSyst/IO/build-status/master)
 [![Build Status](https://travis-ci.org/EXSyst/IO.svg?branch=master)](https://travis-ci.org/EXSyst/IO)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/EXSyst/IO/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/EXSyst/IO/?branch=master)
 
 # EXSyst I/O Component
 Object-oriented I/O facility
