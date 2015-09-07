@@ -153,5 +153,5 @@ interface SourceInterface
      *
      * @api
      */
-    public function skip($bytecount, $allowIncomplete = false);
+    public function skip($byteCount, $allowIncomplete = false);
 }

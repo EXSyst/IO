@@ -14,7 +14,7 @@ interface SelectableInterface
     /**
      * Gets the encapsulated resource (typically a stream).
      *
-     * @returns resource The encapsulated resource (typically a stream).
+     * @return resource The encapsulated resource (typically a stream).
      */
     public function getStream();
 }
