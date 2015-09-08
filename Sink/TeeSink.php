@@ -16,6 +16,9 @@ class TeeSink implements SinkInterface
      */
     private $written;
 
+    /**
+     * @param SinkInterface[] $sinks
+     */
     public function __construct(array $sinks)
     {
         foreach ($sinks as $sink) {
@@ -27,6 +30,9 @@ class TeeSink implements SinkInterface
         $this->written = 0;
     }
 
+    /**
+     * @return SinkInterface[]
+     */
     public function getSinks()
     {
         return $this->sinks;

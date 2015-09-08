@@ -14,7 +14,7 @@ interface StateInterface
     /**
      * Restores the source or sink to which this state belongs to this state.
      *
-     * @return self This state, for method chaining
+     * @return $this This state, for method chaining
      *
      * @throws Exception\RuntimeException If an I/O operation fails
      * @throws Exception\LogicException   If an earlier state has already been restored

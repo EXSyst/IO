@@ -55,7 +55,7 @@ interface SinkInterface
      *
      * @param string $data Data to write
      *
-     * @return self
+     * @return $this
      *
      * @throws Exception\LengthException   If a negative amount is requested
      * @throws Exception\OverflowException If the data cannot be written because the sink is full
@@ -68,7 +68,7 @@ interface SinkInterface
     /**
      * Flushes all the written data on the underlying medium, if applicable.
      *
-     * @return self
+     * @return $this
      *
      * @throws Exception\RuntimeException If an I/O operation fails
      *

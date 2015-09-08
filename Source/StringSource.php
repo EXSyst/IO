@@ -24,6 +24,11 @@ class StringSource implements SourceInterface
      */
     public $offset;
 
+    /**
+     * @param string   $data
+     * @param int      $start
+     * @param int|null $end
+     */
     public function __construct($data, $start = 0, $end = null)
     {
         $this->data = strval($data);
@@ -123,6 +128,9 @@ class StringSource implements SourceInterface
         return $byteCount;
     }
 
+    /**
+     * @return string This object's string representation
+     */
     public function __toString()
     {
         return $this->data;

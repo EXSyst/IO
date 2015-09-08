@@ -31,6 +31,11 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
      */
     private $baseCursor;
 
+    /**
+     * @param resource      $stream
+     * @param bool          $streamOwner
+     * @param callable|null $onClose
+     */
     public function __construct($stream, $streamOwner = false, $onClose = null)
     {
         if (!is_resource($stream)) {
@@ -64,16 +69,25 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
         }
     }
 
+    /**
+     * @return resource
+     */
     public function getStream()
     {
         return $this->stream;
     }
 
+    /**
+     * @return bool
+     */
     public function isStreamOwner()
     {
         return $this->streamOwner;
     }
 
+    /**
+     * @return bool
+     */
     public function isSeekable()
     {
         return $this->seekable;
@@ -302,6 +316,9 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
         return $this;
     }
 
+    /**
+     * @return string This object's string representation
+     */
     public function __toString()
     {
         $meta = stream_get_meta_data($this->stream);

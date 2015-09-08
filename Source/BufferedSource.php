@@ -15,6 +15,9 @@ class BufferedSource extends OuterSource
     private $cursor;
     private $stateCount;
 
+    /**
+     * @param SourceInterface $source
+     */
     public function __construct(SourceInterface $source)
     {
         parent::__construct($source);
