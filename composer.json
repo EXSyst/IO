@@ -20,9 +20,8 @@
         "react/event-loop": "Evented I/O : allows being called back when a stream has available data, instead of having to poll it yourself"
     },
     "autoload": {
-        "psr-0": {
-            "EXSyst\\Component\\IO": ""
+        "psr-4": {
+            "EXSyst\\Component\\IO\\": ""
         }
-    },
-    "target-dir": "EXSyst/Component/IO"
+    }
 }
