@@ -50,7 +50,7 @@ class StringCDataReader extends CDataReader
     }
 
     /** {@inheritdoc} */
-    public function eatSpan($mask, $length = null)
+    public function eatSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
         $maxLength = $src->end - $src->offset;
@@ -63,7 +63,7 @@ class StringCDataReader extends CDataReader
     }
 
     /** {@inheritdoc} */
-    public function eatCSpan($mask, $length = null)
+    public function eatCSpan($mask, $length = null, $allowIncomplete = false)
     {
         $src = $this->source;
         $maxLength = $src->end - $src->offset;
