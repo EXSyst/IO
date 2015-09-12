@@ -112,21 +112,21 @@ class CDataReader extends OuterSource
 
     /**
      * @param string   $mask
-     * @param int|null $length
-     * @param bool     $allowIncomplete
+     * @param int|null $maxLength
+     * @param bool     $onlyNonBlocking
      *
      * @return string
      */
-    public function eatSpan($mask, $length = null, $allowIncomplete = false)
+    public function eatSpan($mask, $maxLength = null, $onlyNonBlocking = false)
     {
         $src = $this->source;
         $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
         $sink = new StringSink();
-        while (!isset($length) || $length > 0) {
-            if ($allowIncomplete && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($length) ? min($length, $blksize) : $blksize, true)) {
+        while (!isset($maxLength) || $maxLength > 0) {
+            if ($onlyNonBlocking && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true)) {
                 break;
             }
-            $data = $src->peek(isset($length) ? min($length, $blksize) : $blksize, true);
+            $data = $src->peek(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true);
             if (empty($data)) {
                 break;
             }
@@ -141,8 +141,8 @@ class CDataReader extends OuterSource
             } else {
                 $sink->write($data);
             }
-            if (isset($length)) {
-                $length -= $len;
+            if (isset($maxLength)) {
+                $maxLength -= $len;
             }
         }
 
@@ -151,21 +151,21 @@ class CDataReader extends OuterSource
 
     /**
      * @param string   $mask
-     * @param int|null $length
-     * @param bool     $allowIncomplete
+     * @param int|null $maxLength
+     * @param bool     $onlyNonBlocking
      *
      * @return string
      */
-    public function eatCSpan($mask, $length = null, $allowIncomplete = false)
+    public function eatCSpan($mask, $maxLength = null, $onlyNonBlocking = false)
     {
         $src = $this->source;
         $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
         $sink = new StringSink();
-        while (!isset($length) || $length > 0) {
-            if ($allowIncomplete && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($length) ? min($length, $blksize) : $blksize, true)) {
+        while (!isset($maxLength) || $maxLength > 0) {
+            if ($onlyNonBlocking && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true)) {
                 break;
             }
-            $data = $src->peek(isset($length) ? min($length, $blksize) : $blksize, true);
+            $data = $src->peek(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true);
             if (empty($data)) {
                 break;
             }
@@ -180,8 +180,8 @@ class CDataReader extends OuterSource
             } else {
                 $sink->write($data);
             }
-            if (isset($length)) {
-                $length -= $len;
+            if (isset($maxLength)) {
+                $maxLength -= $len;
             }
         }
 
@@ -189,14 +189,14 @@ class CDataReader extends OuterSource
     }
 
     /**
-     * @param int|null $length
-     * @param bool     $allowIncomplete
+     * @param int|null $maxLength
+     * @param bool     $onlyNonBlocking
      *
      * @return int
      */
-    public function eatWhiteSpace($length = null, $allowIncomplete = false)
+    public function eatWhiteSpace($maxLength = null, $onlyNonBlocking = false)
     {
-        return strlen($this->eatSpan(self::WHITE_SPACE_MASK, $length, $allowIncomplete));
+        return strlen($this->eatSpan(self::WHITE_SPACE_MASK, $maxLength, $onlyNonBlocking));
     }
 
     /**
