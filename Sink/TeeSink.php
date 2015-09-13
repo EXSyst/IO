@@ -47,7 +47,7 @@ class TeeSink implements SinkInterface
     /** {@inheritdoc} */
     public function getBlockByteCount()
     {
-        return array_reduce($this->sinks, function ($carry, $sink) {
+        return array_reduce($this->sinks, function ($carry, SinkInterface $sink) {
             $blksize = $sink->getBlockByteCount();
             $a = $carry;
             $b = $blksize;
