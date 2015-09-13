@@ -122,34 +122,7 @@ class CDataReader extends OuterSource
      */
     public function eatSpan($mask, $maxLength = null, $onlyNonBlocking = false)
     {
-        $src = $this->source;
-        $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
-        $sink = new StringSink();
-        while (!isset($maxLength) || $maxLength > 0) {
-            if ($onlyNonBlocking && $sink->getWrittenByteCount() > 0 && $src->wouldBlock(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true)) {
-                break;
-            }
-            $data = $src->peek(isset($maxLength) ? min($maxLength, $blksize) : $blksize, true);
-            if (empty($data)) {
-                break;
-            }
-            $len = strspn($data, $mask);
-            if (!$len) {
-                break;
-            }
-            $src->skip($len);
-            if ($len < strlen($data)) {
-                $sink->write(substr($data, 0, $len));
-                break;
-            } else {
-                $sink->write($data);
-            }
-            if (isset($maxLength)) {
-                $maxLength -= $len;
-            }
-        }
-
-        return strval($sink);
+        return $this->internalEatSpan('strspn', $mask, $maxLength, $onlyNonBlocking);
     }
 
     /**
@@ -160,6 +133,17 @@ class CDataReader extends OuterSource
      * @return string
      */
     public function eatCSpan($mask, $maxLength = null, $onlyNonBlocking = false)
+    {
+        return $this->internalEatSpan('strcspn', $mask, $maxLength, $onlyNonBlocking);
+    }
+
+    /**
+     * @param string   $function        to use
+     * @param string   $mask
+     * @param int|null $maxLength
+     * @param bool     $onlyNonBlocking
+     */
+    private function internalEatSpan($function, $mask, $maxLength, $onlyNonBlocking)
     {
         $src = $this->source;
         $blksize = max(Source::MIN_SPAN_BLOCK_BYTE_COUNT, $src->getBlockByteCount());
@@ -172,7 +156,7 @@ class CDataReader extends OuterSource
             if (empty($data)) {
                 break;
             }
-            $len = strcspn($data, $mask);
+            $len = call_user_func($function, $data, $mask);
             if (!$len) {
                 break;
             }
