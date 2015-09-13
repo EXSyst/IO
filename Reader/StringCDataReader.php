@@ -52,23 +52,22 @@ class StringCDataReader extends CDataReader
     /** {@inheritdoc} */
     public function eatSpan($mask, $maxLength = null, $onlyNonBlocking = false)
     {
-        $src = $this->source;
-        $dataLength = $src->end - $src->offset;
-        $maxLength = ($maxLength === null) ? $dataLength : min($maxLength, $dataLength);
-        $maxLength = strspn($src->data, $mask, $src->offset, $maxLength);
-        $substr = substr($src->data, $src->offset, $maxLength);
-        $src->offset += $maxLength;
-
-        return $substr;
+        return $this->internalEatSpan('strspn', $mask, $maxLength, $onlyNonBlocking);
     }
 
     /** {@inheritdoc} */
     public function eatCSpan($mask, $maxLength = null, $onlyNonBlocking = false)
     {
+        return $this->internalEatSpan('strcspn', $mask, $maxLength, $onlyNonBlocking);
+    }
+
+    /** {@inheritdoc} */
+    private function internalEatSpan($function, $mask, $maxLength, $onlyNonBlocking)
+    {
         $src = $this->source;
         $dataLength = $src->end - $src->offset;
         $maxLength = ($maxLength === null) ? $dataLength : min($maxLength, $dataLength);
-        $maxLength = strcspn($src->data, $mask, $src->offset, $maxLength);
+        $maxLength = call_user_func($function, $src->data, $mask, $src->offset, $maxLength);
         $substr = substr($src->data, $src->offset, $maxLength);
         $src->offset += $maxLength;
 
