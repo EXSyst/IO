@@ -12,11 +12,6 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-branches:
-  only:
-    - master
-    - /^\d+\.\d+$/
-
 matrix:
   fast_finish: true
   include:
@@ -27,9 +22,3 @@ before_install:
   - composer self-update
 
 install: composer update $COMPOSER_FLAGS --prefer-dist
-
-script: phpunit --coverage-clover=coverage.clover
-
-after_script:
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then wget https://scrutinizer-ci.com/ocular.phar; fi
-  - if [ "$TRAVIS_PHP_VERSION" != "7.0" ]; then php ocular.phar code-coverage:upload --format=php-clover coverage.clover; fi
