@@ -196,7 +196,7 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
     }
 
     /**
-     * @param int $byteCount
+     * @param int  $byteCount
      * @param bool $allowIncomplete
      *
      * @return bool
