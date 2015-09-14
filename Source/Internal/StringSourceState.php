@@ -14,7 +14,13 @@ use EXSyst\Component\IO\StateInterface;
  */
 class StringSourceState implements StateInterface
 {
+    /**
+     * @var int
+     */
     private $offsetRef;
+    /**
+     * @var int
+     */
     private $offset;
 
     /**

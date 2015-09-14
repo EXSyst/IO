@@ -22,7 +22,7 @@ class JsonReader extends OuterSource
      * @param int  $depth
      * @param int  $options
      *
-     * @return string|null
+     * @return mixed
      *
      * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
      * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested
@@ -45,7 +45,7 @@ class JsonReader extends OuterSource
      * @param int  $depth
      * @param bool $inner
      *
-     * @return string|null
+     * @return string
      *
      * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
      * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested

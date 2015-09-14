@@ -10,9 +10,21 @@ use EXSyst\Component\IO\Sink\StringSink;
 
 class BufferedSource extends OuterSource
 {
+    /**
+     * @var BufferedSourceBuffer
+     */
     private $firstBuffer;
+    /**
+     * @var BufferedSourceBuffer
+     */
     private $lastBuffer;
+    /**
+     * @var int
+     */
     private $cursor;
+    /**
+     * @var int
+     */
     private $stateCount;
 
     /**
@@ -64,6 +76,14 @@ class BufferedSource extends OuterSource
 
         return true;
     }
+
+    /**
+     * @param int                  $byteCount
+     * @param BufferedSourceBuffer $firstBuffer
+     * @param int                  $cursor
+     *
+     * @return false|string
+     */
     private static function readFromSingleBuffer(&$byteCount, BufferedSourceBuffer &$firstBuffer, &$cursor)
     {
         if ($cursor == $firstBuffer->length) {
@@ -85,6 +105,14 @@ class BufferedSource extends OuterSource
 
         return $data;
     }
+
+    /**
+     * @param int                  $byteCount
+     * @param BufferedSourceBuffer $firstBuffer
+     * @param int                  $cursor
+     *
+     * @return string
+     */
     private static function readFromBuffers($byteCount, BufferedSourceBuffer &$firstBuffer, &$cursor)
     {
         $accumulator = [];
@@ -99,6 +127,12 @@ class BufferedSource extends OuterSource
         return implode($accumulator);
     }
 
+    /**
+     * @param int $byteCount
+     * @param int $minByteCount
+     *
+     * @return bool
+     */
     private function ensureVirtualBufferByteCount($byteCount, $minByteCount)
     {
         while (($bufsize = $this->getVirtualBufferByteCount()) < $byteCount) {
@@ -110,6 +144,12 @@ class BufferedSource extends OuterSource
         return true;
     }
 
+    /**
+     * @param int  $byteCount
+     * @param bool $allowIncomplete
+     *
+     * @return bool
+     */
     private function ensureRemainingBufferByteCount($byteCount, $allowIncomplete)
     {
         $cursor = $this->getConsumedByteCount();
@@ -123,11 +163,17 @@ class BufferedSource extends OuterSource
         return $this->firstBuffer->offset + $this->cursor;
     }
 
+    /**
+     * @return int
+     */
     private function getVirtualBufferByteCount()
     {
         return $this->lastBuffer->offset + $this->lastBuffer->length;
     }
 
+    /**
+     * @return int
+     */
     private function getRemainingBufferByteCount()
     {
         return $this->getVirtualBufferByteCount() - $this->getConsumedByteCount();
@@ -183,6 +229,14 @@ class BufferedSource extends OuterSource
         return new BufferedSourceState($this->firstBuffer, $this->cursor, $this->stateCount);
     }
 
+    /**
+     * @param int  $byteCount
+     * @param bool $allowIncomplete
+     * @param bool $skipping
+     *
+     * @throws Exception\LengthException
+     * @throws Exception\UnderflowException
+     */
     private function checkByteCount(&$byteCount, $allowIncomplete, $skipping)
     {
         if ($byteCount < 0) {

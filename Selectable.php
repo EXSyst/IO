@@ -62,6 +62,13 @@ class Selectable implements SelectableInterface
         }
     }
 
+    /**
+     * @param array $objects
+     * @param array $objectsByStream
+     * @param array $streams
+     *
+     * @throws Exception\InvalidArgumentException
+     */
     private static function preprocessSet(array &$objects, array &$objectsByStream, array &$streams)
     {
         foreach ($objects as $object) {

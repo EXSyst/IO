@@ -11,9 +11,21 @@ namespace EXSyst\Component\IO\Source\Internal;
  */
 class BufferedSourceBuffer
 {
+    /**
+     * @var int
+     */
     public $offset = 0;
+    /**
+     * @var string
+     */
     public $data = '';
+    /**
+     * @var int
+     */
     public $length = 0;
+    /**
+     * @var self|null
+     */
     public $next = null;
 
     /**

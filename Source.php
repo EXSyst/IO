@@ -11,7 +11,13 @@ use EXSyst\Component\IO\Source\StringSource;
 
 final class Source
 {
+    /**
+     * @var int
+     */
     const MIN_BLOCK_BYTE_COUNT = 4096;
+    /**
+     * @var int
+     */
     const MIN_SPAN_BLOCK_BYTE_COUNT = 128;
 
     private function __construct()
@@ -81,7 +87,7 @@ final class Source
     }
 
     /**
-     * @return StreamSource|BufferedSource
+     * @return SourceInterface
      */
     public static function fromInput()
     {

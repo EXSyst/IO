@@ -4,6 +4,9 @@ namespace EXSyst\Component\IO\Sink;
 
 final class SystemSink implements SinkInterface
 {
+    /**
+     * @var int
+     */
     const BLOCK_BYTE_COUNT = 1024;
 
     /**
@@ -21,6 +24,9 @@ final class SystemSink implements SinkInterface
         $this->written = 0;
     }
 
+    /**
+     * @return self
+     */
     public static function getInstance()
     {
         if (!self::$instance) {
