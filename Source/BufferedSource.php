@@ -3,10 +3,10 @@
 namespace EXSyst\Component\IO\Source;
 
 use EXSyst\Component\IO\Exception;
+use EXSyst\Component\IO\Sink\StringSink;
 use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\Source\Internal\BufferedSourceBuffer;
 use EXSyst\Component\IO\Source\Internal\BufferedSourceState;
-use EXSyst\Component\IO\Sink\StringSink;
 
 class BufferedSource extends OuterSource
 {

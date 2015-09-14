@@ -18,9 +18,9 @@ class SerializedReader extends OuterSource
     }
 
     /**
-     * @return mixed
-     *
      * @throws Exception\RuntimeException when serialized data is invalid
+     *
+     * @return mixed
      */
     public function readValue()
     {

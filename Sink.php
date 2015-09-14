@@ -2,8 +2,8 @@
 
 namespace EXSyst\Component\IO;
 
-use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Sink\RecordFunctionSink;
+use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Sink\SystemSink;
 use EXSyst\Component\IO\Source\StreamSource;
 
