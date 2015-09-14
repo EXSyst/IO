@@ -16,6 +16,9 @@ final class SerializedChannelFactory implements ChannelFactoryInterface
     {
     }
 
+    /**
+     * @return self
+     */
     public static function getInstance()
     {
         if (!self::$instance) {

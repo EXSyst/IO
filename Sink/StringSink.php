@@ -4,6 +4,9 @@ namespace EXSyst\Component\IO\Sink;
 
 class StringSink implements SinkInterface
 {
+    /**
+     * @var int
+     */
     const MAX_CONCAT_LENGTH = 4096;
 
     /**
@@ -63,6 +66,9 @@ class StringSink implements SinkInterface
         return $this;
     }
 
+    /**
+     * @return string This object's string representation
+     */
     public function __toString()
     {
         return implode($this->data);

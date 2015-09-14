@@ -11,6 +11,9 @@ use EXSyst\Component\IO\Source\StringSource;
 
 class CDataReader extends OuterSource
 {
+    /**
+     * @var string
+     */
     const WHITE_SPACE_MASK = "\011\n\013\014\r ";
 
     /**

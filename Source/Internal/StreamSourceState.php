@@ -14,7 +14,13 @@ use EXSyst\Component\IO\StateInterface;
  */
 class StreamSourceState implements StateInterface
 {
+    /**
+     * @var resource
+     */
     private $stream;
+    /**
+     * @var int
+     */
     private $cursor;
 
     /**
