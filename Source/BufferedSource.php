@@ -82,7 +82,7 @@ class BufferedSource extends OuterSource
      * @param BufferedSourceBuffer $firstBuffer
      * @param int                  $cursor
      *
-     * @return string|bool
+     * @return false|string
      */
     private static function readFromSingleBuffer(&$byteCount, BufferedSourceBuffer &$firstBuffer, &$cursor)
     {
@@ -107,9 +107,9 @@ class BufferedSource extends OuterSource
     }
 
     /**
-     * @var int
-     * @var BufferedSourceBuffer
-     * @var int
+     * @param int                  $byteCount
+     * @param BufferedSourceBuffer $firstBuffer
+     * @param int                  $cursor
      *
      * @return string
      */
