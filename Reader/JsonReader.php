@@ -23,7 +23,7 @@ class JsonReader extends OuterSource
      * @param int  $options
      *
      * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
-     * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested
+     * @throws Exception\EncodingException  when the JSON is invalid or too deeply nested
      *
      * @return mixed
      */
@@ -35,7 +35,7 @@ class JsonReader extends OuterSource
         }
         $value = json_decode($json, $assoc, $depth, $options);
         if ($value === null) {
-            throw new Exception\RuntimeException('Invalid JSON data');
+            throw new Exception\EncodingException(json_last_error_msg());
         }
 
         return $value;
@@ -46,7 +46,7 @@ class JsonReader extends OuterSource
      * @param bool $inner
      *
      * @throws Exception\UnderflowException when the source is not enough longuer to fulfill the request
-     * @throws Exception\RuntimeException   when the JSON is invalid or too deeply nested
+     * @throws Exception\EncodingException  when the JSON is invalid or too deeply nested
      *
      * @return string
      */
@@ -69,7 +69,7 @@ class JsonReader extends OuterSource
                         $parts[] = '\\'.$this->source->read(1);
                     } else {
                         if ($this->source->read(1) != '"') {
-                            throw new Exception\RuntimeException('Invalid JSON data');
+                            throw new Exception\EncodingException('Invalid JSON data');
                         }
                         $parts[] = '"';
                         break;
@@ -80,7 +80,7 @@ class JsonReader extends OuterSource
             }
             if ($this->source->eat('[')) {
                 if ($depth < 2) {
-                    throw new Exception\RuntimeException('Too deeply nested JSON data');
+                    throw new Exception\EncodingException('Too deeply nested JSON data');
                 }
                 $this->source->eatWhiteSpace();
                 if ($this->source->eat(']')) {
@@ -91,14 +91,14 @@ class JsonReader extends OuterSource
                     $subs[] = $this->readJsonValue($depth - 1, true);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != ']') {
-                    throw new Exception\RuntimeException('Invalid JSON data');
+                    throw new Exception\EncodingException('Invalid JSON data');
                 }
 
                 return '['.implode(',', $subs).']';
             }
             if ($this->source->eat('{')) {
                 if ($depth < 2) {
-                    throw new Exception\RuntimeException('Too deeply nested JSON data');
+                    throw new Exception\EncodingException('Too deeply nested JSON data');
                 }
                 $this->source->eatWhiteSpace();
                 if ($this->source->eat('}')) {
@@ -108,12 +108,12 @@ class JsonReader extends OuterSource
                 do {
                     $key = $this->readJsonValue($depth - 1, true);
                     if ($this->source->read(1) != ':') {
-                        throw new Exception\RuntimeException('Invalid JSON data');
+                        throw new Exception\EncodingException('Invalid JSON data');
                     }
                     $subs[] = $key.':'.$this->readJsonValue($depth - 1, true);
                 } while ($this->source->eat(','));
                 if ($this->source->read(1) != '}') {
-                    throw new Exception\RuntimeException('Invalid JSON data');
+                    throw new Exception\EncodingException('Invalid JSON data');
                 }
 
                 return '{'.implode(',', $subs).'}';
@@ -122,7 +122,7 @@ class JsonReader extends OuterSource
             if ($kw !== null) {
                 return $kw;
             }
-            throw new Exception\RuntimeException('Invalid JSON data');
+            throw new Exception\EncodingException('Invalid JSON data');
         } finally {
             $this->source->eatWhiteSpace(null, !$inner);
         }

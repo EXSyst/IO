@@ -2,6 +2,7 @@
 
 namespace EXSyst\Component\IO\Channel;
 
+use EXSyst\Component\IO\Exception;
 use EXSyst\Component\IO\Reader\CDataReader;
 use EXSyst\Component\IO\Reader\JsonReader;
 use EXSyst\Component\IO\Selectable;
@@ -64,7 +65,12 @@ class JsonChannel implements ChannelInterface
     /** {@inheritdoc} */
     public function sendMessage($message)
     {
-        $this->sink->write(json_encode($message, $this->encoderOptions, $this->depth)."\n");
+        $encodedMessage = json_encode($message, $this->encoderOptions, $this->depth);
+        if ($encodedMessage == false) {
+            throw new Exception\EncodingException(json_last_error_msg());
+        }
+
+        $this->sink->write($encodedMessage."\n");
 
         return $this;
     }
