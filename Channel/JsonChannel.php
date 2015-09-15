@@ -66,7 +66,7 @@ class JsonChannel implements ChannelInterface
     public function sendMessage($message)
     {
         $encodedMessage = json_encode($message, $this->encoderOptions, $this->depth);
-        if ($encodedMessage == false) {
+        if ($encodedMessage === false) {
             throw new Exception\EncodingException(json_last_error_msg());
         }
 
