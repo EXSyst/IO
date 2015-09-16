@@ -80,6 +80,13 @@ class StringSource implements SourceInterface
         return new StringSourceState($this->offset);
     }
 
+    /**
+     * @param int  $byteCount
+     * @param bool $allowIncomplete
+     *
+     * @throws Exception\LengthException
+     * @throws Exception\UnderflowException
+     */
     private function checkByteCount(&$byteCount, $allowIncomplete)
     {
         if ($byteCount < 0) {
