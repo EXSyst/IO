@@ -144,13 +144,12 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
             $remain = $this->getRemainingByteCount();
 
             return $remain !== null && $remain <= 0;
-        } else {
-            if (!$this->selectRead()) {
-                return false;
-            }
-
-            return feof($this->stream);
         }
+        if (!$this->selectRead()) {
+            return false;
+        }
+
+        return feof($this->stream);
     }
 
     /** {@inheritdoc} */
@@ -224,29 +223,29 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
     {
         if ($this->checkByteCount($byteCount, $allowIncomplete)) {
             return fread($this->stream, $byteCount);
-        } else {
-            $blocks = [];
-            $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
-            while ($byteCount > 0) {
-                if ($allowIncomplete && !empty($blocks) && !$this->selectRead()) {
-                    break;
-                }
-                $block = fread($this->stream, min($blksize, $byteCount));
-                if ($block === false) {
-                    throw new Exception\RuntimeException('An I/O error occurred');
-                }
-                if (empty($block)) {
-                    break;
-                }
-                $byteCount -= strlen($block);
-                $blocks[] = $block;
-            }
-            if ($byteCount > 0 && !$allowIncomplete) {
-                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
-            }
-
-            return implode($blocks);
         }
+
+        $blocks = [];
+        $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
+        while ($byteCount > 0) {
+            if ($allowIncomplete && !empty($blocks) && !$this->selectRead()) {
+                break;
+            }
+            $block = fread($this->stream, min($blksize, $byteCount));
+            if ($block === false) {
+                throw new Exception\RuntimeException('An I/O error occurred');
+            }
+            if (empty($block)) {
+                break;
+            }
+            $byteCount -= strlen($block);
+            $blocks[] = $block;
+        }
+        if ($byteCount > 0 && !$allowIncomplete) {
+            throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+        }
+
+        return implode($blocks);
     }
 
     /** {@inheritdoc} */
@@ -267,28 +266,28 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
             fseek($this->stream, $byteCount, SEEK_CUR);
 
             return $byteCount;
-        } else {
-            $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
-            $baseByteCount = $byteCount;
-            while ($byteCount > 0) {
-                if ($allowIncomplete && $byteCount < $baseByteCount && !$this->selectRead()) {
-                    break;
-                }
-                $block = fread($this->stream, min($blksize, $byteCount));
-                if ($block === false) {
-                    throw new Exception\RuntimeException('An I/O error occurred');
-                }
-                if (empty($block)) {
-                    break;
-                }
-                $byteCount -= strlen($block);
-            }
-            if ($byteCount > 0 && !$allowIncomplete) {
-                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
-            }
-
-            return $baseByteCount - $byteCount;
         }
+
+        $blksize = max(Source::MIN_BLOCK_BYTE_COUNT, $this->getBlockByteCount());
+        $baseByteCount = $byteCount;
+        while ($byteCount > 0) {
+            if ($allowIncomplete && $byteCount < $baseByteCount && !$this->selectRead()) {
+                break;
+            }
+            $block = fread($this->stream, min($blksize, $byteCount));
+            if ($block === false) {
+                throw new Exception\RuntimeException('An I/O error occurred');
+            }
+            if (empty($block)) {
+                break;
+            }
+            $byteCount -= strlen($block);
+        }
+        if ($byteCount > 0 && !$allowIncomplete) {
+            throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+        }
+
+        return $baseByteCount - $byteCount;
     }
 
     /** {@inheritdoc} */

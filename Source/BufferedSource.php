@@ -87,12 +87,12 @@ class BufferedSource extends OuterSource
     private static function readFromSingleBuffer(&$byteCount, BufferedSourceBuffer &$firstBuffer, &$cursor)
     {
         if ($cursor == $firstBuffer->length) {
-            if ($firstBuffer->next) {
-                $firstBuffer = $firstBuffer->next;
-                $cursor = 0;
-            } else {
+            if (!$firstBuffer->next) {
                 return false;
             }
+
+            $firstBuffer = $firstBuffer->next;
+            $cursor = 0;
         }
         $len = min($byteCount, $firstBuffer->length - $cursor);
         $data = ($cursor == 0 && $len == $firstBuffer->length) ? $firstBuffer->data : substr($firstBuffer->data, $cursor, $len);
@@ -293,29 +293,30 @@ class BufferedSource extends OuterSource
             }
 
             return $effectiveByteCount - $byteCount;
-        } else {
-            $this->checkByteCount($byteCount, $allowIncomplete, true);
-            $effectiveByteCount = $byteCount;
-            while ($byteCount > 0) {
-                $data = self::readFromSingleBuffer($byteCount, $this->firstBuffer, $this->cursor);
-                if ($data === false) {
-                    break;
-                }
-            }
-            if ($byteCount > 0 && (!$allowIncomplete || !$this->source->wouldBlock($byteCount, $allowIncomplete))) {
-                $cursor = $this->getConsumedByteCount();
-                $skippedByteCount = $this->source->skip($byteCount, $allowIncomplete);
-                $this->firstBuffer = new BufferedSourceBuffer($cursor + $skippedByteCount);
-                $this->lastBuffer = $this->firstBuffer;
-                $this->cursor = 0;
-                if ($skippedByteCount < $byteCount && !$allowIncomplete) {
-                    throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
-                }
+        }
 
-                return $effectiveByteCount + $skippedByteCount - $byteCount;
-            } else {
-                return $effectiveByteCount - $byteCount;
+        $this->checkByteCount($byteCount, $allowIncomplete, true);
+        $effectiveByteCount = $byteCount;
+        while ($byteCount > 0) {
+            $data = self::readFromSingleBuffer($byteCount, $this->firstBuffer, $this->cursor);
+            if ($data === false) {
+                break;
             }
         }
+
+        if ($byteCount > 0 && (!$allowIncomplete || !$this->source->wouldBlock($byteCount, $allowIncomplete))) {
+            $cursor = $this->getConsumedByteCount();
+            $skippedByteCount = $this->source->skip($byteCount, $allowIncomplete);
+            $this->firstBuffer = new BufferedSourceBuffer($cursor + $skippedByteCount);
+            $this->lastBuffer = $this->firstBuffer;
+            $this->cursor = 0;
+            if ($skippedByteCount < $byteCount && !$allowIncomplete) {
+                throw new Exception\UnderflowException('The source doesn\'t have enough remaining data to fulfill the request');
+            }
+
+            return $effectiveByteCount + $skippedByteCount - $byteCount;
+        }
+
+        return $effectiveByteCount - $byteCount;
     }
 }

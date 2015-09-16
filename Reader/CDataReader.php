@@ -164,9 +164,9 @@ class CDataReader extends OuterSource
             if ($len < strlen($data)) {
                 $sink->write(substr($data, 0, $len));
                 break;
-            } else {
-                $sink->write($data);
             }
+            $sink->write($data);
+
             if (isset($maxLength)) {
                 $maxLength -= $len;
             }

@@ -49,12 +49,11 @@ class Selectable implements SelectableInterface
      */
     public static function streamOf($object)
     {
+        $selectable = null;
         if ($object instanceof OuterSource) {
             $selectable = $object->getSourceByType(SelectableInterface::class);
         } elseif ($object instanceof SelectableInterface) {
             $selectable = $object;
-        } else {
-            $selectable = null;
         }
 
         if ($selectable !== null) {

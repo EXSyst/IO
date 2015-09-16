@@ -65,15 +65,14 @@ class JsonReader extends OuterSource
                 $parts = ['"'];
                 for (;;) {
                     $parts[] = $this->source->eatCSpan('"\\');
-                    if ($this->source->eat('\\')) {
-                        $parts[] = '\\'.$this->source->read(1);
-                    } else {
+                    if (!$this->source->eat('\\')) {
                         if ($this->source->read(1) != '"') {
                             throw new Exception\EncodingException('Invalid JSON data');
                         }
                         $parts[] = '"';
                         break;
                     }
+                    $parts[] = '\\'.$this->source->read(1);
                 }
 
                 return implode($parts);
