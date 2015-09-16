@@ -18,9 +18,9 @@ class SerializedReader extends OuterSource
     }
 
     /**
-     * @return mixed
+     * @throws Exception\EncodingException when serialized data is invalid
      *
-     * @throws Exception\RuntimeException when serialized data is invalid
+     * @return mixed
      */
     public function readValue()
     {
@@ -30,7 +30,7 @@ class SerializedReader extends OuterSource
         }
         $value = unserialize($serialized);
         if ($value === false) {
-            throw new Exception\RuntimeException('Invalid serialized data');
+            throw new Exception\EncodingException('Invalid serialized data');
         }
 
         return $value;

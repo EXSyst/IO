@@ -2,11 +2,10 @@
 
 namespace EXSyst\Component\IO;
 
-use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Sink\RecordFunctionSink;
+use EXSyst\Component\IO\Sink\SinkInterface;
 use EXSyst\Component\IO\Sink\SystemSink;
 use EXSyst\Component\IO\Source\StreamSource;
-use EXSyst\Component\IO\Source\BufferedSource;
 
 final class Sink
 {
@@ -31,7 +30,7 @@ final class Sink
      * @param string        $mode
      * @param callable|null $onClose
      *
-     * @return StreamSource|BufferedSource
+     * @return StreamSource
      */
     public static function fromFile($file, $mode = 'wb', $onClose = null)
     {
@@ -39,7 +38,7 @@ final class Sink
     }
 
     /**
-     * @return SystemSink
+     * @return SinkInterface
      */
     public static function fromOutput()
     {
@@ -47,7 +46,7 @@ final class Sink
     }
 
     /**
-     * @return StreamSource
+     * @return SinkInterface
      */
     public static function fromError()
     {
@@ -59,7 +58,7 @@ final class Sink
      * @param string|null $destination
      * @param string|null $extraHeaders
      *
-     * @return RecordFunctionSink
+     * @return SinkInterface
      */
     public static function fromLog($messageType = 0, $destination = null, $extraHeaders = null)
     {
@@ -94,7 +93,7 @@ final class Sink
      * @param string        $format
      * @param mixed         $arg,...
      */
-    public static function writeFormatted(SinkInterface $sink, $format)
+    public static function writeFormatted(SinkInterface $sink, $format/*, ...$arg */)
     {
         $args = array_slice(func_get_args(), 2);
         if ($sink instanceof SystemSink) {

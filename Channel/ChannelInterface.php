@@ -20,9 +20,10 @@ interface ChannelInterface extends SelectableInterface
      *
      * @param mixed $message The message to send
      *
-     * @return $this
+     * @throws Exception\RuntimeException  If an I/O operation fails
+     * @throws Exception\EncodingException If an error occurs while encoding or decoding data.
      *
-     * @throws Exception\RuntimeException If an I/O operation fails
+     * @return $this
      *
      * @api
      */
@@ -31,10 +32,10 @@ interface ChannelInterface extends SelectableInterface
     /**
      * Receives a message from the other task.
      *
-     * @return mixed The received message
-     *
      * @throws Exception\UnderflowException If the other task has closed the connection
      * @throws Exception\RuntimeException   If an I/O operation fails
+     *
+     * @return mixed The received message
      *
      * @api
      */

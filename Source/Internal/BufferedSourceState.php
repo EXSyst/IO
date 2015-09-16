@@ -14,10 +14,25 @@ use EXSyst\Component\IO\StateInterface;
  */
 class BufferedSourceState implements StateInterface
 {
+    /**
+     * @var BufferedSourceBuffer
+     */
     private $firstBufferRef;
+    /**
+     * @var BufferedSourceBuffer
+     */
     private $firstBuffer;
+    /**
+     * @var int
+     */
     private $cursorRef;
+    /**
+     * @var int
+     */
     private $cursor;
+    /**
+     * @var int
+     */
     private $stateCountRef;
 
     /**

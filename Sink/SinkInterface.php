@@ -16,9 +16,9 @@ interface SinkInterface
     /**
      * Counts how many bytes were written into the sink.
      *
-     * @return int Number of bytes written into the sink
-     *
      * @throws Exception\RuntimeException If an I/O operation fails
+     *
+     * @return int Number of bytes written into the sink
      *
      * @api
      */
@@ -29,9 +29,9 @@ interface SinkInterface
      *
      * For optimal performance, it is recommended to write data into a sink in blocks.
      *
-     * @return int The sink's block size, in bytes
-     *
      * @throws Exception\RuntimeException If an I/O operation fails
+     *
+     * @return int The sink's block size, in bytes
      *
      * @api
      */
@@ -42,9 +42,9 @@ interface SinkInterface
      *
      * For optimal performance, it is recommended to write data into a sink in blocks.
      *
-     * @return int Number of bytes before the sink's next block boundary
-     *
      * @throws Exception\RuntimeException If an I/O operation fails
+     *
+     * @return int Number of bytes before the sink's next block boundary
      *
      * @api
      */
@@ -55,11 +55,11 @@ interface SinkInterface
      *
      * @param string $data Data to write
      *
-     * @return $this
-     *
      * @throws Exception\LengthException   If a negative amount is requested
      * @throws Exception\OverflowException If the data cannot be written because the sink is full
      * @throws Exception\RuntimeException  If an I/O operation fails
+     *
+     * @return $this
      *
      * @api
      */
@@ -68,9 +68,9 @@ interface SinkInterface
     /**
      * Flushes all the written data on the underlying medium, if applicable.
      *
-     * @return $this
-     *
      * @throws Exception\RuntimeException If an I/O operation fails
+     *
+     * @return $this
      *
      * @api
      */

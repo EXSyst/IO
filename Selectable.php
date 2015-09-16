@@ -62,6 +62,13 @@ class Selectable implements SelectableInterface
         }
     }
 
+    /**
+     * @param array $objects
+     * @param array $objectsByStream
+     * @param array $streams
+     *
+     * @throws Exception\InvalidArgumentException
+     */
     private static function preprocessSet(array &$objects, array &$objectsByStream, array &$streams)
     {
         foreach ($objects as $object) {
@@ -82,10 +89,10 @@ class Selectable implements SelectableInterface
      * @param array      $exceptObjects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
      * @param float|null $seconds       Maximum number of seconds to wait for at least one stream to fulfill the condition for which it is watched, or null to wait indefinitely.
      *
-     * @return int Number of streams which actually fulfill the condition for which they are watched
-     *
      * @throws Exception\InvalidArgumentException If all the sets are empty or any set contains anything else than selectables
      * @throws Exception\RuntimeException         If an I/O operation fails
+     *
+     * @return int Number of streams which actually fulfill the condition for which they are watched
      */
     public static function select(array &$readObjects, array &$writeObjects, array &$exceptObjects, $seconds)
     {
@@ -127,10 +134,10 @@ class Selectable implements SelectableInterface
      * @param array      $objects On call, set of objects wrapping streams which must be watched for incoming data. On return, the set will only contain streams which actually have incoming data.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming data, or null to wait indefinitely.
      *
-     * @return int Number of streams which actually have incoming data
-     *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException         If an I/O operation fails
+     *
+     * @return int Number of streams which actually have incoming data
      */
     public static function selectRead(array &$objects, $seconds)
     {
@@ -146,10 +153,10 @@ class Selectable implements SelectableInterface
      * @param array      $objects On call, set of objects wrapping streams which must be watched for ability to write to them. On return, the set will only contain streams which can actually be written to.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to be able to be written to, or null to wait indefinitely.
      *
-     * @return int Number of streams which can actually be written to
-     *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException         If an I/O operation fails
+     *
+     * @return int Number of streams which can actually be written to
      */
     public static function selectWrite(array &$objects, $seconds)
     {
@@ -165,10 +172,10 @@ class Selectable implements SelectableInterface
      * @param array      $objects On call, set of objects wrapping streams which must be watched for incoming high-priority data. On return, the set will only contain streams which actually have incoming high-priority data.
      * @param float|null $seconds Maximum number of seconds to wait for at least one stream to have incoming high-priority data, or null to wait indefinitely.
      *
-     * @return int Number of streams which actually have incoming high-priority data
-     *
      * @throws Exception\InvalidArgumentException If the set is empty or contains anything else than selectables
      * @throws Exception\RuntimeException         If an I/O operation fails
+     *
+     * @return int Number of streams which actually have incoming high-priority data
      */
     public static function selectExcept(array &$objects, $seconds)
     {

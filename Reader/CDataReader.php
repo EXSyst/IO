@@ -3,14 +3,17 @@
 namespace EXSyst\Component\IO\Reader;
 
 use EXSyst\Component\IO\Exception;
-use EXSyst\Component\IO\Source;
-use EXSyst\Component\IO\Source\SourceInterface;
 use EXSyst\Component\IO\Sink\StringSink;
+use EXSyst\Component\IO\Source;
 use EXSyst\Component\IO\Source\OuterSource;
+use EXSyst\Component\IO\Source\SourceInterface;
 use EXSyst\Component\IO\Source\StringSource;
 
 class CDataReader extends OuterSource
 {
+    /**
+     * @var string
+     */
     const WHITE_SPACE_MASK = "\011\n\013\014\r ";
 
     /**

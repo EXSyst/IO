@@ -125,6 +125,9 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
         return $this->getConsumedByteCount();
     }
 
+    /**
+     * @return bool
+     */
     private function selectRead()
     {
         $read = [$this->stream];
@@ -192,6 +195,12 @@ class StreamSource implements SelectableInterface, SinkInterface, SourceInterfac
         return new StreamSourceState($this->stream);
     }
 
+    /**
+     * @param int  $byteCount
+     * @param bool $allowIncomplete
+     *
+     * @return bool
+     */
     private function checkByteCount(&$byteCount, $allowIncomplete)
     {
         if ($byteCount < 0) {

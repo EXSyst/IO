@@ -10,7 +10,7 @@ class TeeSinkTest extends AbstractSinkTest
     public function setUp()
     {
         $this->sinkBuilder = $this->getMockBuilder('EXSyst\Component\IO\Sink\TeeSink')
-            ->setConstructorArgs([array()])
+            ->setConstructorArgs([[]])
             ->setMethods(null);
     }
 
@@ -21,10 +21,10 @@ class TeeSinkTest extends AbstractSinkTest
     public function testCreationWithAnInvalidSink()
     {
         $this->sinkBuilder
-            ->setConstructorArgs([array(
+            ->setConstructorArgs([[
                 $this->createMockedSink(),
                 new \stdClass(),
-            )])
+            ]])
             ->getMock();
     }
 
@@ -34,14 +34,14 @@ class TeeSinkTest extends AbstractSinkTest
         $mockedSink2 = $this->createMockedSink();
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs([array('s1' => $mockedSink1, 'foo' => $mockedSink2)])
+            ->setConstructorArgs([['s1' => $mockedSink1, 'foo' => $mockedSink2]])
             ->getMock();
 
         $this->assertEquals([$mockedSink1, $mockedSink2], \PHPUnit_Framework_Assert::readAttribute($sink, 'sinks'));
         $this->assertEquals([$mockedSink1, $mockedSink2], $sink->getSinks());
         $this->assertEquals(0, \PHPUnit_Framework_Assert::readAttribute($sink, 'written'));
 
-        $sink = $this->sinkBuilder->setConstructorArgs(array([]))->getMock();
+        $sink = $this->sinkBuilder->setConstructorArgs([[]])->getMock();
         $this->assertEquals(1, $sink->getBlockByteCount());
     }
 
@@ -66,7 +66,7 @@ class TeeSinkTest extends AbstractSinkTest
             ->willReturn(3240);
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs([array($mockedSink1, $mockedSink2, $mockedSink3)])
+            ->setConstructorArgs([[$mockedSink1, $mockedSink2, $mockedSink3]])
             ->getMock();
 
         $this->assertEquals(91932249240, $sink->getBlockByteCount());
@@ -86,8 +86,8 @@ class TeeSinkTest extends AbstractSinkTest
             ->expects($this->exactly(2))
             ->method('write')
             ->withConsecutive(
-                array($firstWrite),
-                array($secondWrite)
+                [$firstWrite],
+                [$secondWrite]
             );
 
         $mockedSink2 = $this->createMockedSink();
@@ -99,12 +99,12 @@ class TeeSinkTest extends AbstractSinkTest
             ->expects($this->exactly(2))
             ->method('write')
             ->withConsecutive(
-                array($firstWrite),
-                array($secondWrite)
+                [$firstWrite],
+                [$secondWrite]
             );
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs(array([$mockedSink1, $mockedSink2]))
+            ->setConstructorArgs([[$mockedSink1, $mockedSink2]])
             ->getMock();
 
         $blockByteCount = 46008;
@@ -132,7 +132,7 @@ class TeeSinkTest extends AbstractSinkTest
             ->method('flush');
 
         $sink = $this->sinkBuilder
-            ->setConstructorArgs(array([$mockedSink1, $mockedSink2]))
+            ->setConstructorArgs([[$mockedSink1, $mockedSink2]])
             ->getMock();
 
         $sink->flush();
