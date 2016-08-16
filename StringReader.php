@@ -107,6 +107,21 @@ class StringReader
         return $this->read(strcspn($this->data, $mask, $maxLength));
     }
 
+    public function getOffset()
+    {
+        return $this->offset;
+    }
+
+    public function getLine()
+    {
+        return $this->line;
+    }
+
+    public function getRow()
+    {
+        return $this->row;
+    }
+
     /**
      * Counts how many bytes were consumed from the source.
      *
