@@ -102,7 +102,7 @@ class StringReader
             $maxLength = $this->getRemainingByteCount();
         }
 
-        return $this->read(strspn($this->data, $mask, $maxLength));
+        return $this->read(strspn($this->data, $mask, $this->offset, $maxLength));
     }
 
     /**
@@ -117,7 +117,7 @@ class StringReader
             $maxLength = $this->getRemainingByteCount();
         }
 
-        return $this->read(strcspn($this->data, $mask, $maxLength));
+        return $this->read(strcspn($this->data, $mask, $this->offset, $maxLength));
     }
 
     public function getOffset()
