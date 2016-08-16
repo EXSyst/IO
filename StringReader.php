@@ -61,6 +61,19 @@ class StringReader
     }
 
     /**
+     * @param string[]|\Traversable
+     *
+     * @param string|null
+     */
+    public function eatAny($strings) {
+        foreach ($strings as $string) {
+            if ($this->eat($string)) {
+                return $string;
+            }
+        }
+    }
+
+    /**
      * @param string $string
      *
      * @return bool
