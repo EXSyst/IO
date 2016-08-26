@@ -2,7 +2,7 @@
     "name": "exsyst/io",
     "type": "library",
     "description": "Object-oriented I/O facility",
-    "license": "Apache-2.0",
+    "license": "MIT",
     "authors": [
         {
             "name": "EXSyst"
